@@ -1,0 +1,63 @@
+DATABASE
+
+User
+- user_id (PF)
+- username
+- email
+- password
+- firstName
+- lastName
+- Phone
+- urlavatar
+
+Address
+- address_id (PF)
+- user_id (FK)
+- street
+- city
+- country
+
+Product
+- product_id (PF)
+- product_name
+- description
+- category
+- manufacturer
+- price
+- stock_quanity
+- createdAt
+- url           --thumbnail
+- urls          --pictures
+
+ProductReview
+- review_id (PF)
+- product_id (FK)
+- user_id (FK)
+- comment
+- rating
+
+Cart
+- cart_id (PF)
+- user_id (FK)
+
+CartItems
+- cart_item_id (PK)
+- cart_id (FK)
+- product_id (FK)
+- quanity
+
+Order
+- order_id (PF)
+- user_id (FK)
+- payment_method
+- order_status
+- order_date
+- total_cost
+
+OrderItem
+- order_item_id (PF)
+- order_id (FK)
+- product_id (FK)
+- quanity
+- price_at_purchase
+

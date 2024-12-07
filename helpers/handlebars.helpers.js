@@ -24,4 +24,7 @@ module.exports = {
     formatDate: (date) => {
         return new Date(date).toLocaleString();
     },
+    isActive: function (currentRoute, route, options) {
+        return currentRoute === route ? options.fn(this) : options.inverse(this);
+    }
 };

@@ -7,6 +7,7 @@ const db = require('./configs/db');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
+
 const cors = require('cors');
 const flash = require('connect-flash');
 
@@ -14,6 +15,8 @@ const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = requ
 
 const app = express();
 
+
+app.use('/', require('./index.routes'));
 
 // Để sử dụng biến môi trường trong file .env
 require('dotenv').config();
@@ -65,6 +68,7 @@ hbs.registerHelper('lt', hbs_helpers.lt);
 hbs.registerHelper('subtract', hbs_helpers.subtract);
 hbs.registerHelper('times', hbs_helpers.times);
 hbs.registerHelper('formatDate', hbs_helpers.formatDate);
+hbs.registerHelper('isActive', hbs_helpers.isActive);
 
 // Thiết lập thư mục tĩnh
 app.use(express.static(path.join(__dirname, 'public')));

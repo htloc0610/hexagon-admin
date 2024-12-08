@@ -13,7 +13,7 @@ const passport = require('passport');
 const cors = require('cors');
 const flash = require('connect-flash');
 
-// const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
+const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
 
 const app = express();
 
@@ -34,11 +34,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Express session
+// app.use(session({
+//     store: MongoStore.create({
+//         mongoUrl: process.env.SESSION_STORE_URI, // Ensure this is correctly set
+//         ttl: 14 * 24 * 60 * 60, // 14 days
+//         autoRemove: 'native'}),
+//     secret: 'penguynSecret',
+//     resave: false,
+//     saveUninitialized: true,
+// }));
+
 app.use(session({
-    store: MongoStore.create({
-        mongoUrl: process.env.SESSION_STORE_URI, // Ensure this is correctly set
-        ttl: 14 * 24 * 60 * 60, // 14 days
-        autoRemove: 'native'}),
     secret: 'penguynSecret',
     resave: false,
     saveUninitialized: true,
@@ -105,7 +111,7 @@ const connectDB = async () => {
 const PORT = process.env.PORT || 3000;
 
 (async () => {
-    // await connectDB();
+    await connectDB();
     // Khởi động server
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);

@@ -13,7 +13,7 @@ const passport = require('passport');
 const cors = require('cors');
 const flash = require('connect-flash');
 
-// const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
+const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
 
 const app = express();
 

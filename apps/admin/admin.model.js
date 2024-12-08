@@ -8,6 +8,11 @@ const Admin = db.define(
       type: DataTypes.STRING,
       unique: true,
     },
+
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     password: {
       type: DataTypes.STRING,
     },
@@ -24,10 +29,6 @@ const Admin = db.define(
       type: DataTypes.STRING,
       defaultValue:
         "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png",
-    },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
     },
   },
   {

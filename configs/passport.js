@@ -1,13 +1,13 @@
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+// const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcrypt");
-const userService = require("../apps/users/user.service");
-const userController = require("../apps/users/user.controller");
+const adminService = require("../apps/admin/admin.service");
+const adminController = require("../apps/admin/admin.controller");
 
 module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: "username" }, (username, password, done) => {
-        userService.getUserByUsername(username)
+        adminService.getAdminByUsername(username)
           .then((user) => {
             if (!user) {
               return done(null, false, {
@@ -20,9 +20,9 @@ module.exports = function (passport) {
               }
   
               if (isMatch) {
-                if (!user.isVerify) {
-                  return done(null, false, { message: "Please active your account with registed email!" });
-                }
+                // if (!user.isVerify) {
+                //   return done(null, false, { message: "Please active your account with registed email!" });
+                // }
                 return done(null, user, { message: "Login successfully" });
               } else {
                 return done(null, false, {
@@ -37,53 +37,53 @@ module.exports = function (passport) {
   );
   
 
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.CALLBACK_URL,
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        try {
-          const email = profile.emails[0].value;
+  // passport.use(
+  //   new GoogleStrategy(
+  //     {
+  //       clientID: process.env.GOOGLE_CLIENT_ID,
+  //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  //       callbackURL: process.env.CALLBACK_URL,
+  //     },
+  //     async (accessToken, refreshToken, profile, done) => {
+  //       try {
+  //         const email = profile.emails[0].value;
 
-          // Tìm kiếm người dùng
-          let user;
-          try {
-            user = await userService.getUserByEmail(email);
-          } catch (err) {}
+  //         // Tìm kiếm người dùng
+  //         let user;
+  //         try {
+  //           user = await adminService.getUserByEmail(email);
+  //         } catch (err) {}
 
-          //   Nếu không thấy thì tạo mới
-          if (!user) {
-            const newUser = {
-              username: email,
-              email: email,
-              password: null,
-              isVerify: true,
-              firstName: profile.name.givenName,
-              lastName: profile.name.familyName,
-              url: profile.photos[0].value,
-              //   Lỗi hiển thị hình
-              //   url:
-              //     profile.photos[0].value ||
-              //     "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png",
-            };
+  //         //   Nếu không thấy thì tạo mới
+  //         if (!user) {
+  //           const newUser = {
+  //             username: email,
+  //             email: email,
+  //             password: null,
+  //             isVerify: true,
+  //             firstName: profile.name.givenName,
+  //             lastName: profile.name.familyName,
+  //             url: profile.photos[0].value,
+  //             //   Lỗi hiển thị hình
+  //             //   url:
+  //             //     profile.photos[0].value ||
+  //             //     "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png",
+  //           };
 
-            const createdUser = await userService.createUserEmail({
-              ...newUser,
-              password: "",
-            });
-            return done(null, createdUser);
-          }
-          // Return user
-          return done(null, user);
-        } catch (err) {
-          return done(err);
-        }
-      }
-    )
-  );
+  //           const createdUser = await adminService.createUserEmail({
+  //             ...newUser,
+  //             password: "",
+  //           });
+  //           return done(null, createdUser);
+  //         }
+  //         // Return user
+  //         return done(null, user);
+  //       } catch (err) {
+  //         return done(err);
+  //       }
+  //     }
+  //   )
+  // );
 
   passport.serializeUser(function (user, done) {
     process.nextTick(function () {

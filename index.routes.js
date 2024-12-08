@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const adminController = require('./apps/admin/admin.controller');
 
 router.get('/', (req, res) => {
     res.render('index', { currentRoute: '/' });
 });
 
 router.get('/login', (req, res) => {
-    res.render('login', { currentRoute: '/login' });
+    res.render('login', { layout: 'login-layout', currentRoute: '/login' });
 });
 
 router.get('/products', (req, res) => {
@@ -27,6 +28,8 @@ router.get('/profile', (req, res) => {
     res.render('profile', { currentRoute: '/profile' });
 });
 
+router.post('/register', adminController.createAdmin);
+router.post('/login', adminController.loginAdmin);
 
 
 const accounts = [

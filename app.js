@@ -6,23 +6,24 @@ const hbs = require("handlebars");
 const db = require('./configs/db');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('passport');
+
 
 
 const cors = require('cors');
 const flash = require('connect-flash');
 
-const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
+// const { Product, User, Review, Cart, CartItem, Order, OrderItem,  Admin } = require('./apps/relationships');
 
 const app = express();
 
 
-app.use('/', require('./index.routes'));
 
 // Để sử dụng biến môi trường trong file .env
 require('dotenv').config();
 
 // Passport config
-// require('./configs/passport')(passport);
+require('./configs/passport')(passport);
 
 
 // Sử dụng json parser
@@ -47,8 +48,8 @@ app.use(session({
 app.use(flash());
 
 // Passport middlewares
-// app.use(passport.session());
-// app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.initialize());
 
 
 // Thiết lập view engine là Handlebars
@@ -79,6 +80,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/products', require('./apps/products/product.routes'));
 // app.use('/cart', require('./apps/carts/cart.routes'));
 // app.use('/orders', require('./apps/orders/order.routes'));
+app.use('/', require('./index.routes'));
 
 
 // APIs

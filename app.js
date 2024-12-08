@@ -80,11 +80,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/products', require('./apps/products/product.routes'));
 // app.use('/cart', require('./apps/carts/cart.routes'));
 // app.use('/orders', require('./apps/orders/order.routes'));
-// app.use('/', require('./index.routes'));
-
-app.get('/', (req, res) => {
-    res.send("OK");
-});
+app.use('/', require('./index.routes'));
 
 
 // APIs

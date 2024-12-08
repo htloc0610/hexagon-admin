@@ -99,6 +99,7 @@ const connectDB = async () => {
         console.log('Database connection established');
     } catch (e) {
         console.log('Database connection failed', e);
+        process.exit(1);
     }
 };
 

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('./apps/admin/admin.controller');
+const { ensureAuthenticated } = require('./configs/auth');
 
-router.get('/', (req, res) => {
+
+router.get('/', ensureAuthenticated, (req, res) => {
     res.render('index', { currentRoute: '/' });
 });
 
@@ -10,26 +12,29 @@ router.get('/login', (req, res) => {
     res.render('login', { layout: 'login-layout', currentRoute: '/login' });
 });
 
-router.get('/products', (req, res) => {
+router.get('/products', ensureAuthenticated, (req, res) => {
     res.render('products', { currentRoute: '/products' });
 });
 
-router.get('/edit-product', (req, res) => {
+router.get('/edit-product', ensureAuthenticated, (req, res) => {
     res.render('edit-product', { currentRoute: '/edit-product' });
 });
 
 
-router.get('/add-product', (req, res) => {
+router.get('/add-product', ensureAuthenticated, (req, res) => {
     res.render('add-product', { currentRoute: '/add-product' });
 });
 
-
-router.get('/profile', (req, res) => {
+router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile', { currentRoute: '/profile' });
 });
 
+
+
 router.post('/register', adminController.createAdmin);
-router.post('/login', adminController.loginAdmin);
+router.post('/login', adminController.loginAdmin); 
+router.get('/logout', adminController.logoutAdmin);
+
 
 
 const accounts = [
@@ -53,6 +58,12 @@ router.get('/accounts', (req, res) => {
     const paginatedAccounts = filteredAccounts.slice((page - 1) * accountsPerPage, page * accountsPerPage);
 
     res.json({ accounts: paginatedAccounts, totalPages });
+
+
+
+
+
+
 });
 
 

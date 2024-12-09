@@ -150,6 +150,11 @@ const adminController = {
                 return res.redirect('/');
             });
         })(req, res, next);
+    },
+    async logoutAdmin(req, res) {
+        req.logout(() => {
+          res.redirect("/login");
+        });
     }
 }
 

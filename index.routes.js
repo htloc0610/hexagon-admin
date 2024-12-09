@@ -25,8 +25,19 @@ router.get('/add-product', ensureAuthenticated, (req, res) => {
     res.render('add-product', { currentRoute: '/add-product' });
 });
 
+// router.get('/profile', ensureAuthenticated, (req, res) => {
+//     res.render('profile', { currentRoute: '/profile' });
+// });
+
 router.get('/profile', ensureAuthenticated, (req, res) => {
-    res.render('profile', { currentRoute: '/profile' });
+    res.render('profile', {
+        currentRoute: 'profile',
+        name: req.user?.username,
+        profileImg: req.user?.picture,
+        email: req.user?.email,
+        firstName: req.user?.firstName,
+        lastName: req.user?.lastName
+    });
 });
 
 
@@ -58,11 +69,6 @@ router.get('/accounts', (req, res) => {
     const paginatedAccounts = filteredAccounts.slice((page - 1) * accountsPerPage, page * accountsPerPage);
 
     res.json({ accounts: paginatedAccounts, totalPages });
-
-
-
-
-
 
 });
 

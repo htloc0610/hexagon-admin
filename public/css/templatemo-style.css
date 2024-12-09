@@ -715,3 +715,7 @@ input[type="checkbox"]:focus {
   padding: 0.25rem 0.5rem; /* Smaller padding */
   margin-left: 0.5rem; /* Space between text and button */
 }
+
+input:disabled {
+  color: #00009f; /* Light text color */
+}

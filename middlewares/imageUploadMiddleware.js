@@ -55,7 +55,6 @@ const resizeAndUploadImage = async (req, res, next) => {
 
         const results = await Promise.all(uploadPromises); // Wait for all uploads to complete
         req.imageUrl = results.map((result) => result.secure_url); // Store secure URLs in req.imageUrls
-        console.log('Uploaded to Cloudinary:', req.imageUrl);
 
         next();
     } catch (error) {

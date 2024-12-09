@@ -37,7 +37,6 @@ const adminController = {
     async createAdmin(req, res) {
         try {
             // Lấy dữ liệu từ request body
-            console.log(req.body);
             const { username, email, password, firstName, lastName, url } = req.body;
 
             // Kiểm tra xem tên người dùng hoặc email đã tồn tại chưa

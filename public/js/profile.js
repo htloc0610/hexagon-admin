@@ -6,9 +6,15 @@ const passwordForm = document.getElementById('change-password-form');
 const inputs = document.querySelectorAll('#profile-details-form input');
 const profileImgInput = document.getElementById('profileImg');
 const profileImgPreview = document.getElementById('avatar-preview');
+const uploadAvatarButton = document.getElementById('upload-avatar-btn');
+const imgDiv = document.getElementById('img-div');
+const cancelChangePasswordButton = document.getElementById('cancel-change-password-btn');
 
 const errorMessageDiv = document.getElementById('error-message');
 const successMessageDiv = document.getElementById('success-message');
+
+// Initially hide the upload avatar button
+// uploadAvatarButton.style.display = 'none';
 
 // Helper to show error message
 function showError(message) {
@@ -37,6 +43,7 @@ editButton.addEventListener('click', () => {
             input.removeAttribute('disabled');
         }
     });
+    imgDiv.style.display = 'block';
     updateButton.style.display = 'block';
     editButton.style.display = 'none';
 });
@@ -45,6 +52,14 @@ editButton.addEventListener('click', () => {
 changePasswordButton.addEventListener('click', () => {
     passwordForm.style.display = 'block';
     changePasswordButton.style.display = 'none';
+});
+
+
+// Cancel changing password
+cancelChangePasswordButton.addEventListener('click', () => {
+    passwordForm.style.display = 'none';
+    changePasswordButton.style.display = 'block';
+    passwordForm.reset();
 });
 
 // Preview profile image
@@ -59,7 +74,7 @@ profileImgInput.addEventListener('change', function(event) {
     }
 });
 
-document.getElementById('upload-avatar-btn').addEventListener('click', function() {
+uploadAvatarButton.addEventListener('click', function() {
     profileImgInput.click();
 });
 

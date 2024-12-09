@@ -32,7 +32,6 @@ router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadIm
     if (!req.imageUrl) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
-    console.log('Uploaded to Cloudinary:', req.imageUrl);
     res.json({ message: 'Upload success', imageUrl: req.imageUrl });
 });
 

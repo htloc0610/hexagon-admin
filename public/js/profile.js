@@ -4,7 +4,7 @@ const changePasswordButton = document.getElementById('change-password-btn');
 const profileForm = document.getElementById('profile-details-form');
 const passwordForm = document.getElementById('change-password-form');
 const inputs = document.querySelectorAll('#profile-details-form input');
-const profileImgInput = document.getElementById('profilePicture');
+const profileImgInput = document.getElementById('profileImg');
 const profileImgPreview = document.getElementById('avatar-preview');
 
 const errorMessageDiv = document.getElementById('error-message');
@@ -15,6 +15,9 @@ function showError(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';
     successMessageDiv.style.display = 'none';
+    setTimeout(() => {
+        errorMessageDiv.style.display = 'none';
+    }, 10000); // Display for 10 seconds
 }
 
 // Helper to show success message
@@ -22,6 +25,9 @@ function showSuccess(message) {
     successMessageDiv.textContent = message;
     successMessageDiv.style.display = 'block';
     errorMessageDiv.style.display = 'none';
+    setTimeout(() => {
+        successMessageDiv.style.display = 'none';
+    }, 10000); // Display for 10 seconds
 }
 
 // Enable editing profile fields
@@ -91,14 +97,14 @@ profileForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const formData = new FormData(profileForm);
-    const profileImgFile = formData.get('profilePicture');
+    const profileImgFile = formData.get('profileImg');
 
     if (profileImgFile && profileImgFile.size > 0) {
         // Upload the image first
         const imageUploadFormData = new FormData();
-        imageUploadFormData.append('profilePicture', profileImgFile);
+        imageUploadFormData.append('profileImg', profileImgFile);
 
-        const imageUploadResponse = await fetch('/profilePicture', {
+        const imageUploadResponse = await fetch('/profileImg', {
             method: 'POST',
             body: imageUploadFormData
         });

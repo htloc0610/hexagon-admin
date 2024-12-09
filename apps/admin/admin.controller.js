@@ -19,7 +19,7 @@ const adminController = {
         try {
             const userId = req.params.id;
         
-            const user = await userService.getAdminById(userId);
+            const user = await adminService.getAdminById(userId);
             return res.status(200).json({
                 id: user.id,
                 username: user.username,
@@ -76,7 +76,7 @@ const adminController = {
             const { username, email, firstName, lastName, profileImgUrl } = req.body;
   
             // Fetch the current user data
-            const currentUser = await userService.getAdminById(userId);
+            const currentUser = await adminService.getAdminById(userId);
             let imageUrl = currentUser.url;
   
             if (profileImgUrl) {
@@ -126,7 +126,7 @@ const adminController = {
         try {
           const userId = req.params.id;
     
-          const result = await userService.deleteAdmin(userId);
+          const result = await adminService.deleteAdmin(userId);
           return res.status(200).json(result);
         } catch (error) {
           console.error(error);
@@ -151,11 +151,66 @@ const adminController = {
             });
         })(req, res, next);
     },
+    
     async logoutAdmin(req, res) {
         req.logout(() => {
           res.redirect("/login");
         });
-    }
+    },
+
+    // Cập nhật mật khẩu
+    async changePassword(req, res) {
+        try {
+            const userId = req.user.id; // Get user ID from authenticated session
+            const { oldPassword, newPassword } = req.body;
+
+            // Fetch the current user data
+            const currentUser = await adminService.getUserById(userId);
+
+            // Check if the old password matches the current password
+            
+            if (!await adminService.validatePassword(oldPassword, currentUser.password)) {
+                return res.status(400).json({ message: 'Incorrect password' });
+            }
+            // Check if the new password is different from the old password
+            if (oldPassword === newPassword) {
+                return res.status(400).json({ message: 'New password must be different from the old password' });
+            }
+            
+            password = newPassword;
+            const updateData = { password };
+
+            
+
+            // Update the user information
+            const updatedUser = await adminService.updateUser(userId, updateData);
+
+            // Re-authenticate the user to update the session
+            req.logIn(updatedUser, function(err) {
+                if (err) {
+                    console.error('Error re-authenticating user:', err);
+                    return res.status(500).json({ message: 'Server error' });
+                }
+
+                // Return the updated user information
+                return res.status(200).json({
+                    successMessage: 'User updated successfully',
+                    user: {
+                        id: updatedUser.id,
+                        username: updatedUser.username,
+                        email: updatedUser.email,
+                        firstName: updatedUser.firstName,
+                        lastName: updatedUser.lastName,
+                        profileImg: updatedUser.profileImg,
+                    }
+                });
+            });
+
+        } catch (error) {
+            console.error('Error updating user:', error);
+            return res.status(500).json({ errorMessage: 'Server error' });
+        }
+    },
 }
 
 module.exports = adminController;

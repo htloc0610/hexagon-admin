@@ -9,10 +9,7 @@
                         <i class="far fa-trash-alt tm-product-delete-icon"></i>
                     </a>
                 </div>
-                <input id="profilePicture" name="profilePicture" type="file" class="form-control validate" style="display: none;" />
-                <button type="button" id="upload-avatar-btn" class="btn btn-primary btn-block text-uppercase">
-                    Upload New Photo
-                </button>
+                <!-- Move these elements inside the form -->
             </div>
         </div>
         <div class="col-lg-8 tm-block-col tm-col-account-settings">
@@ -22,7 +19,8 @@
                 <div id="success-message" class="alert alert-success" style="display: none;"></div>
 
                 <!-- Profile Details Form -->
-                <form id="profile-details-form" class="tm-signup-form row" action="/updateProfile" method="POST">
+                <form id="profile-details-form" class="tm-signup-form row" action="/profile" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
                     <div class="form-group col-lg-6">
                         <label for="username">Username</label>
                         <input id="username" name="username" type="text" class="form-control validate" value="{{name}}" disabled />
@@ -38,6 +36,13 @@
                     <div class="form-group col-lg-6">
                         <label for="lastName">Last Name</label>
                         <input id="lastName" name="lastName" type="text" class="form-control validate" value="{{lastName}}" disabled />
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="profileImg">Profile Image</label>
+                        <input id="profileImg" name="profileImg" type="file" class="form-control validate" style="display: none;" />
+                        <button type="button" id="upload-avatar-btn" class="btn btn-primary btn-block text-uppercase">
+                            Upload New Photo
+                        </button>
                     </div>
                     <div class="form-group col-lg-6">
                         <label class="tm-hide-sm">&nbsp;</label>
@@ -56,7 +61,7 @@
                 </form>
 
                 <!-- Change Password Form -->
-                <form id="change-password-form" class="tm-signup-form row" action="/updatePassword" method="POST" style="display: none;">
+                <form id="change-password-form" class="tm-signup-form row" action="/password" method="POST" style="display: none;">
                     <div class="form-group col-lg-6">
                         <label for="password">Current Password</label>
                         <input id="password" name="password" type="password" class="form-control validate" />

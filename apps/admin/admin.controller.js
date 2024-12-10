@@ -1,5 +1,6 @@
 const adminService = require('./admin.service');
 const passport = require("passport");
+const userService = require('../users/user.service');
 
 
 // admin.controller.js
@@ -8,12 +9,51 @@ const adminController = {
 
     async getAllAdmins(req, res) {
         try {
-            const admins = await AdminService.getAllAdmins();
-            res.status(200).json(admins);
+            const admins = await adminService.getAllAdmins();
+            const adminData = admins.map(admin => admin.dataValues); // Extract dataValues
+            // console.log('LIST OF ADMINS', adminData);
+            return adminData; // Return the extracted data
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            throw new Error(error.message); // Throw the error to be caught in the route handler
         }
     },
+
+    async getAllAccounts(req, res) {
+        try {
+            const admins = await adminService.getAllAdmins();
+            const users = await userService.getAllUsers(); // Assuming you have a method to get all users
+            const adminData = admins.map(admin => ({ ...admin.dataValues, role: 'Admin' })); // Extract dataValues for admins and add role
+            const userData = users.map(user => ({ ...user.dataValues, role: 'User' })); // Extract dataValues for users and add role
+            const accounts = [...adminData, ...userData]; // Combine admin and user data
+            // console.log('LIST OF ACCOUNTS', accounts);
+            return accounts; // Return the combined data
+        } catch (error) {
+            throw new Error(error.message); // Throw the error to be caught in the route handler
+        }
+    },
+
+    async getAccountById(id) {
+        console.log('id', id);
+        try {
+            const admin = await adminService.getAdminById(id);
+            if (admin) {
+                return { ...admin.dataValues, role: 'Admin' };
+            }
+        } catch (error) {
+            console.log('Admin not found, checking user...');
+        }
+
+        try {
+            const user = await userService.getUserById(id);
+            if (user) {
+                return { ...user.dataValues, role: 'User' };
+            }
+        } catch (error) {
+            throw new Error('Account not found');
+        }
+    },
+
+    
 
     async getAdminById(req, res) {
         try {

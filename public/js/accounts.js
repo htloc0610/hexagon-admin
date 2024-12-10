@@ -1,66 +1,57 @@
-document.getElementById('filterName').addEventListener('input', filterAccounts);
-document.getElementById('filterEmail').addEventListener('input', filterAccounts);
+document.addEventListener('DOMContentLoaded', () => {
+    const sortButtons = document.querySelectorAll('.btn-sort');
+    const accountsTable = document.getElementById('accountsTable');
+    const filterNameInput = document.getElementById('filterName');
+    const filterEmailInput = document.getElementById('filterEmail');
+    let sortOrder = 'asc'; // Default sort order
 
-
-document.querySelectorAll('.btn-sort').forEach(button => {
-    button.addEventListener('click', () => sortAccounts(button.dataset.sort));
-});
-
-let currentPage = 1;
-const accountsPerPage = 5;
-
-function fetchAccounts(page = 1) {
-    currentPage = page;
-    const filterName = document.getElementById('filterName').value.toLowerCase();
-    const filterEmail = document.getElementById('filterEmail').value.toLowerCase();
-
-    fetch(`/accounts?page=${page}&name=${filterName}&email=${filterEmail}`)
-        .then(response => response.json())
-        .then(data => {
-            displayAccounts(data.accounts);
-            setupPagination(data.totalPages);
+    sortButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const sortKey = button.getAttribute('data-sort');
+            sortTable(sortKey);
+            // Toggle sort order
+            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
         });
-}
-
-function displayAccounts(accounts) {
-    const tbody = document.getElementById('accountsTable');
-    tbody.innerHTML = '';
-    accounts.forEach((account, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <th scope="row">${index + 1 + (currentPage - 1) * accountsPerPage}</th>
-            <td>${account.username}</td>
-            <td>${account.email}</td>
-            <td>${account.registrationTime}</td>
-            <td>${account.role}</td>
-            <td>
-                <button class="btn btn-sm btn-primary">Edit</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-            </td>
-        `;
-        tbody.appendChild(row);
     });
-}
 
-function setupPagination(totalPages) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        const li = document.createElement('li');
-        li.classList.add('page-item');
-        li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-        li.addEventListener('click', () => fetchAccounts(i));
-        pagination.appendChild(li);
+    filterNameInput.addEventListener('input', filterTable);
+    filterEmailInput.addEventListener('input', filterTable);
+
+    function sortTable(sortKey) {
+        const rows = Array.from(accountsTable.querySelectorAll('tr'));
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = a.querySelector(`td[data-key="${sortKey}"]`).textContent.trim();
+            const bValue = b.querySelector(`td[data-key="${sortKey}"]`).textContent.trim();
+
+            if (sortKey === 'id') {
+                return sortOrder === 'asc' ? parseInt(aValue) - parseInt(bValue) : parseInt(bValue) - parseInt(aValue);
+            } else if (sortKey === 'createdAt') {
+                return sortOrder === 'asc' ? Date.parse(aValue) - Date.parse(bValue) : Date.parse(bValue) - Date.parse(aValue);
+            } else {
+                return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+            }
+        });
+
+        accountsTable.innerHTML = '';
+        sortedRows.forEach(row => accountsTable.appendChild(row));
     }
-}
 
-function filterAccounts() {
-    fetchAccounts(1);
-}
+    function filterTable() {
+        const filterName = filterNameInput.value.toLowerCase();
+        const filterEmail = filterEmailInput.value.toLowerCase();
+        const rows = Array.from(accountsTable.querySelectorAll('tr'));
 
-function sortAccounts(sortBy) {
-    // Sorting logic here
-}
+        rows.forEach(row => {
+            const name = row.querySelector('td[data-key="username"]').textContent.toLowerCase();
+            const email = row.querySelector('td[data-key="email"]').textContent.toLowerCase();
+            const matchesName = name.includes(filterName);
+            const matchesEmail = email.includes(filterEmail);
 
-// Initial fetch
-fetchAccounts();
+            if (matchesName && matchesEmail) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+});

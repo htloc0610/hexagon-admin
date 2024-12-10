@@ -78,7 +78,7 @@ hbs.registerHelper('formatDate', hbs_helpers.formatDate);
 hbs.registerHelper('isActive', hbs_helpers.isActive);
 
 // Thiết lập thư mục tĩnh
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // Định nghĩa các routes
 // app.use('/', require('./apps/dashboard/index.routes'));

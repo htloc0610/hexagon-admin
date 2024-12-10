@@ -55,30 +55,24 @@ router.put('/profile', ensureAuthenticated, adminController.updateAdmin);
 router.put('/password', ensureAuthenticated, adminController.changePassword);
 
 
-
-const accounts = [
-    { username: 'user1', email: 'user1@example.com', registrationTime: '2023-01-01', role: 'User' },
-    { username: 'admin1', email: 'admin1@example.com', registrationTime: '2023-01-02', role: 'Admin' },
-    // Add more accounts as needed
-];
-
-router.get('/accounts', (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const name = req.query.name || '';
-    const email = req.query.email || '';
-    const accountsPerPage = 5;
-
-    const filteredAccounts = accounts.filter(account =>
-        account.username.toLowerCase().includes(name.toLowerCase()) &&
-        account.email.toLowerCase().includes(email.toLowerCase())
-    );
-
-    const totalPages = Math.ceil(filteredAccounts.length / accountsPerPage);
-    const paginatedAccounts = filteredAccounts.slice((page - 1) * accountsPerPage, page * accountsPerPage);
-
-    res.json({ accounts: paginatedAccounts, totalPages });
-
+router.get('/accounts', async (req, res) => {
+    try {
+        const admins = await adminController.getAllAccounts(req, res);
+        res.render('accounts', { accounts: admins });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
+
+router.get('/account/:id', async (req, res) => {
+    try {
+        const account = await adminController.getAccountById(req.params.id);
+        res.render('accountDetails', { account });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 
 module.exports = router;

@@ -719,3 +719,12 @@ input[type="checkbox"]:focus {
 input:disabled {
   color: #00009f; /* Light text color */
 }
+
+.profile-img {
+  max-width: 150px; /* Set the maximum width */
+  max-height: 150px; /* Set the maximum height */
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Center the image */
+}

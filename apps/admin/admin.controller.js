@@ -1,3 +1,4 @@
+const moment = require('moment');
 const adminService = require('./admin.service');
 const passport = require("passport");
 const userService = require('../users/user.service');
@@ -50,6 +51,20 @@ const adminController = {
             }
         } catch (error) {
             throw new Error('Account not found');
+        }
+    },
+
+    async getPaginatedAccounts(offset, limit) {
+        try {
+            const admins = await adminService.getPaginatedAdmins(offset, limit);
+            const users = await userService.getPaginatedUsers(offset, limit); // Assuming you have a method to get paginated users
+            const adminData = admins.map(admin => ({ ...admin.dataValues, role: 'Admin', createdAt: moment(admin.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for admins and add role
+            const userData = users.map(user => ({ ...user.dataValues, role: 'User', createdAt: moment(user.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for users and add role
+            const accounts = [...adminData, ...userData].slice(0, limit); // Combine admin and user data and limit to 10
+            console.log('LIST OF PAGINATED ACCOUNTS', accounts);
+            return accounts; // Return the combined data
+        } catch (error) {
+            throw new Error(error.message); // Throw the error to be caught in the route handler
         }
     },
 

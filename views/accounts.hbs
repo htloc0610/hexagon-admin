@@ -7,7 +7,7 @@
                         <h2 class="tm-block-title">List of Accounts</h2>
                         <p class="text-white">Accounts</p>
                         <div class="form-group">
-                            <input type="text" id="filterName" class="form-control mb-2" placeholder="Filter by name">
+                            <input type="text" id="filterName" class="form-control mb-2" placeholder="Filter by username">
                             <input type="text" id="filterEmail" class="form-control mb-4" placeholder="Filter by email">
                         </div>
                         <select class="custom-select mb-4">
@@ -49,6 +49,9 @@
                                     {{/each}}
                                 </tbody>
                             </table>
+                        </div>
+                        <div id="pagination" class="d-flex justify-content-center mt-3">
+                            <!-- Pagination controls will be inserted here by JavaScript -->
                         </div>
                     </div>
                 </div>

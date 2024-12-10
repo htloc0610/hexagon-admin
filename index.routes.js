@@ -57,8 +57,24 @@ router.put('/password', ensureAuthenticated, adminController.changePassword);
 
 router.get('/accounts', async (req, res) => {
     try {
-        const admins = await adminController.getAllAccounts(req, res);
-        res.render('accounts', { accounts: admins });
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+        const accounts = await adminController.getPaginatedAccounts(offset, limit);
+        res.render('accounts', { accounts, page });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// API route to fetch paginated accounts
+router.get('/api/accounts', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+        const accounts = await adminController.getPaginatedAccounts(offset, limit);
+        res.json(accounts);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

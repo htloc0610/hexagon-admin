@@ -22,6 +22,14 @@ const userService = {
         } catch (error) {
             throw new Error('Error fetching user: ' + error.message);
         }
+    },
+    async getPaginatedUsers(offset, limit) {
+        try {
+            const users = await User.findAll({ offset, limit }); // Retrieve paginated user records from the database
+            return users;
+        } catch (error) {
+            throw new Error('Error retrieving paginated users: ' + error.message);
+        }
     }
 };
 

@@ -23,7 +23,7 @@ router.get('/edit-product', ensureAuthenticated, (req, res) => {
 });
 
 
-router.get('/add-product', ensureAuthenticated, (req, res) => {
+router.get('/add-product', (req, res) => {
     res.render('add-product', { currentRoute: '/add-product' });
 });
 
@@ -68,7 +68,7 @@ router.get('/accounts', async (req, res) => {
 });
 
 // API route to fetch paginated accounts
-router.get('/api/accounts', async (req, res) => {
+router.get('/api/accounts', ensureAuthenticated, async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = 10;
@@ -80,7 +80,7 @@ router.get('/api/accounts', async (req, res) => {
     }
 });
 
-router.get('/account/:id', async (req, res) => {
+router.get('/account/:id', ensureAuthenticated, async (req, res) => {
     try {
         const account = await adminController.getAccountById(req.params.id);
         res.render('accountDetails', { account });

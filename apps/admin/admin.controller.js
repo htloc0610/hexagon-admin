@@ -12,7 +12,6 @@ const adminController = {
         try {
             const admins = await adminService.getAllAdmins();
             const adminData = admins.map(admin => admin.dataValues); // Extract dataValues
-            // console.log('LIST OF ADMINS', adminData);
             return adminData; // Return the extracted data
         } catch (error) {
             throw new Error(error.message); // Throw the error to be caught in the route handler
@@ -26,7 +25,6 @@ const adminController = {
             const adminData = admins.map(admin => ({ ...admin.dataValues, role: 'Admin' })); // Extract dataValues for admins and add role
             const userData = users.map(user => ({ ...user.dataValues, role: 'User' })); // Extract dataValues for users and add role
             const accounts = [...adminData, ...userData]; // Combine admin and user data
-            // console.log('LIST OF ACCOUNTS', accounts);
             return accounts; // Return the combined data
         } catch (error) {
             throw new Error(error.message); // Throw the error to be caught in the route handler
@@ -41,7 +39,6 @@ const adminController = {
                 return { ...admin.dataValues, role: 'Admin' };
             }
         } catch (error) {
-            console.log('Admin not found, checking user...');
         }
 
         try {
@@ -61,7 +58,6 @@ const adminController = {
             const adminData = admins.map(admin => ({ ...admin.dataValues, role: 'Admin', createdAt: moment(admin.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for admins and add role
             const userData = users.map(user => ({ ...user.dataValues, role: 'User', createdAt: moment(user.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for users and add role
             const accounts = [...adminData, ...userData].slice(0, limit); // Combine admin and user data and limit to 10
-            console.log('LIST OF PAGINATED ACCOUNTS', accounts);
             return accounts; // Return the combined data
         } catch (error) {
             throw new Error(error.message); // Throw the error to be caught in the route handler

@@ -21,7 +21,11 @@ const adminService = {
 
   async getPaginatedAdmins(offset, limit) {
     try {
-      const admins = await Admin.findAll({ offset, limit }); // Retrieve paginated admin records from the database
+      const admins = await Admin.findAll({
+        attributes: { exclude: ["password"] },
+        offset,
+        limit,
+      }); // Retrieve paginated admin records from the database excluding the password field
       return admins;
     } catch (error) {
       throw new Error("Error retrieving paginated admins: " + error.message);

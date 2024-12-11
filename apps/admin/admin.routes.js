@@ -44,7 +44,7 @@ router.post(
 router.get("/profile", ensureAuthenticated, adminController.renderProfilePage);
 
 // [POST] /register
-router.post("/register", adminController.createAdmin);
+// router.post("/register", adminController.createAdmin);
 
 // [POST] /login
 router.post("/login", adminController.loginAdmin);
@@ -77,7 +77,7 @@ router.get("/api/accounts", ensureAuthenticated, async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const offset = (page - 1) * limit;
-    const accounts = await adminController.getPaginatedAccounts(offset, limit);
+    const accounts = await adminController.getPaginatedAccounts;
     res.json(accounts);
   } catch (error) {
     res.status(500).json({ message: error.message });

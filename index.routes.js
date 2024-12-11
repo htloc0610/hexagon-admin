@@ -90,5 +90,15 @@ router.get('/account/:id', ensureAuthenticated, async (req, res) => {
 });
 
 
+router.get('/products', async (req, res) => {
+    try {
+        const products = await adminController.getProducts();
+        res.render('products', { products });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 
 module.exports = router;

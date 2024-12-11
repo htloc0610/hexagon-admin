@@ -4,6 +4,7 @@ const productController = {
     async getAllProducts() {
         try {
             const products = await productService.getAllProducts();
+            // console.log(products);
             return products;
         } catch (error) {
             throw new Error('Error retrieving products: ' + error.message);

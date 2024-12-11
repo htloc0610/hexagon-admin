@@ -3,7 +3,7 @@ const router = express.Router();
 const adminController = require('./apps/admin/admin.controller');
 const { ensureAuthenticated } = require('./configs/auth');
 const { uploadPhoto, resizeAndUploadImage } = require('./middlewares/imageUploadMiddleware');
-
+const productController = require('./apps/products/product.controller');
 
 
 router.get('/', ensureAuthenticated, (req, res) => {
@@ -14,9 +14,9 @@ router.get('/login', (req, res) => {
     res.render('login', { layout: 'login-layout', currentRoute: '/login' });
 });
 
-router.get('/products', ensureAuthenticated, (req, res) => {
-    res.render('products', { currentRoute: '/products' });
-});
+// router.get('/products', ensureAuthenticated, (req, res) => {
+//     res.render('products', { currentRoute: '/products' });
+// });
 
 router.get('/edit-product', ensureAuthenticated, (req, res) => {
     res.render('edit-product', { currentRoute: '/edit-product' });
@@ -95,7 +95,10 @@ router.get('/products', async (req, res) => {
         const products = await productController.getAllProducts();
         const categories = await productController.getAllCategories();
         const manufacturers = await productController.getAllManufacturers();
-        res.render('products', { products, categories, manufacturers });
+
+        const productData = products.map(product => product.dataValues);
+
+        res.render('products', { products: productData, categories, manufacturers });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

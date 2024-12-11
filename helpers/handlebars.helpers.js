@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
     range: function (start, end, query, category, brand, min, max, rating) {
         let result = [];
@@ -22,7 +24,7 @@ module.exports = {
         return result;
     },
     formatDate: (date) => {
-        return new Date(date).toLocaleString();
+        return moment(date).format('DD/MM/YYYY, h:mm:ss a');
     },
     isActive: function (currentRoute, route, options) {
         return currentRoute === route ? options.fn(this) : options.inverse(this);

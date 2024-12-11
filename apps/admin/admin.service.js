@@ -20,6 +20,15 @@ const adminService = {
         throw new Error("Error creating user: " + error.message);
         }
     },
+    async getPaginatedAdmins(offset, limit) {
+        try {
+            const admins = await Admin.findAll({ offset, limit }); // Retrieve paginated admin records from the database
+            return admins;
+        } catch (error) {
+            throw new Error('Error retrieving paginated admins: ' + error.message);
+        }
+    },
+    
     // Tạo người dùng từ thông tin lấy từ email
     // async createUserEmail(userData) {
     //     try {
@@ -34,6 +43,15 @@ const adminService = {
     //     throw new Error("Error creating user: " + error.message);
     //     }
     // },
+
+    async getAllAdmins() {
+        try {
+            const admins = await Admin.findAll(); // Retrieve all admin records from the database
+            return admins;
+        } catch (error) {
+            throw new Error('Error retrieving admins: ' + error.message);
+        }
+    },
 
     // Lấy người dùng theo id
     async getAdminById(userId) {

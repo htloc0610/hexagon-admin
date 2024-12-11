@@ -77,7 +77,7 @@ router.get("/api/accounts", ensureAuthenticated, async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const offset = (page - 1) * limit;
-    const accounts = await adminController.getPaginatedAccounts;
+    const accounts = await adminController.getPaginatedAccounts(offset, limit);
     res.json(accounts);
   } catch (error) {
     res.status(500).json({ message: error.message });

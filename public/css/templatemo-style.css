@@ -728,3 +728,53 @@ input:disabled {
   display: block;
   margin: 0 auto; /* Center the image */
 }
+
+.tm-block {
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #2c2c2c;
+  border-radius: 10px;
+}
+
+.tm-block-title {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.tm-table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.tm-table th,
+.tm-table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.tm-table th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.tm-table td {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.tm-product-name {
+  font-weight: bold;
+}
+
+.tm-product-delete-link {
+  color: #ff6b6b;
+}
+
+.tm-product-delete-icon {
+  font-size: 1.2rem;
+}

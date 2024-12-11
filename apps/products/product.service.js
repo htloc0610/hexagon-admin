@@ -2,37 +2,37 @@ const Product = require('./product.model'); // Đường dẫn tới model Produ
 const { Op } = require('sequelize');
 
 const productService = {
-    async getProducts() {
-        return Product.findAll();
+    async getAllProducts() {
+        try {
+            const products = await Product.findAll();
+            return products;
+        } catch (error) {
+            throw new Error('Error retrieving products: ' + error.message);
+        }
     },
-    async getProductById(id) {
-        return Product.findByPk(id);
+
+    async getAllCategories() {
+        try {
+            const categories = await Product.findAll({
+                attributes: ['category'],
+                group: ['category']
+            });
+            return categories.map(category => category.category);
+        } catch (error) {
+            throw new Error('Error retrieving categories: ' + error.message);
+        }
     },
-    async createProduct(product) {
-        return Product.create(product);
-    },
-    async updateProduct(id, product) {
-        return Product.update(product, {
-            where: {
-                id
-            }
-        });
-    },
-    async deleteProduct(id) {
-        return Product.destroy({
-            where: {
-                id
-            }
-        });
-    },
-    async searchProduct(keyword) {
-        return Product.findAll({
-            where: {
-                name: {
-                    [Op.like]: `%${keyword}%`
-                }
-            }
-        });
+
+    async getAllManufacturers() {
+        try {
+            const manufacturers = await Product.findAll({
+                attributes: ['manufacturer'],
+                group: ['manufacturer']
+            });
+            return manufacturers.map(manufacturer => manufacturer.manufacturer);
+        } catch (error) {
+            throw new Error('Error retrieving manufacturers: ' + error.message);
+        }
     }
 };
 

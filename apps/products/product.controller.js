@@ -18,6 +18,14 @@ const productController = {
             throw new Error('Error retrieving categories: ' + error.message);
         }
     },
+    async getAllManufacturers() {
+        try {
+            const manufacturers = await productService.getAllManufacturers();
+            return manufacturers;
+        } catch (error) {
+            throw new Error('Error retrieving manufacturers: ' + error.message);
+        }
+    }
 };
 
 module.exports = productController;

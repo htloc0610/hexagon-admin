@@ -42,7 +42,7 @@ app.use(
   session({
     store: MongoStore.create({
       mongoUrl: process.env.SESSION_STORE_URI, // Ensure this is correctly set
-      ttl: 14 * 24 * 60 * 60, // 14 days
+      ttl: 1 * 24 * 60 * 60, // 14 days
       autoRemove: "native",
     }),
     secret: "penguynSecret",

@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevPageButton = document.getElementById('prevPage');
     const nextPageButton = document.getElementById('nextPage');
     const pageIndicator = document.getElementById('pageIndicator');
+    const filterNameInput = document.getElementById('filterName');
+    const filterCategoryInput = document.getElementById('filterCategory');
+    const filterManufacturerInput = document.getElementById('filterManufacturer');
     let sortOrder = 'asc'; // Default sort order
     let currentPage = 1;
     let currentSortKey = ''; // Track the current sort key
@@ -18,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
             sortTable(sortKey);
         });
     });
+
+    filterNameInput.addEventListener('input', filterTable);
+    filterCategoryInput.addEventListener('input', filterTable);
+    filterManufacturerInput.addEventListener('input', filterTable);
 
     prevPageButton.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -34,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const aValue = a[sortKey];
             const bValue = b[sortKey];
 
-            if (sortKey === 'totalPurchase') {
+            if (sortKey === 'id' || sortKey === 'totalPurchase') {
                 return sortOrder === 'asc' ? parseInt(aValue) - parseInt(bValue) : parseInt(bValue) - parseInt(aValue);
             } else if (sortKey === 'price') {
                 return sortOrder === 'asc' ? parseFloat(aValue) - parseFloat(bValue) : parseFloat(bValue) - parseFloat(aValue);
@@ -46,6 +53,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderTable(sortedRows);
+    }
+
+    function filterTable() {
+        const filterName = filterNameInput.value.toLowerCase();
+        const filterCategory = filterCategoryInput.value.toLowerCase();
+        const filterManufacturer = filterManufacturerInput.value.toLowerCase();
+        const filteredRows = productsData.filter(product => {
+            const name = product.productName.toLowerCase();
+            const category = product.category.toLowerCase();
+            const manufacturer = product.manufacturer.toLowerCase();
+            return name.includes(filterName) && category.includes(filterCategory) && manufacturer.includes(filterManufacturer);
+        });
+
+        renderTable(filteredRows);
     }
 
     function fetchProducts(page) {

@@ -10,10 +10,28 @@
                     </div>
                     <div class="row tm-content-row">
                         <div class="col-12">
+                            <div class="form-group mb-3">
+                                <label for="filterName">Filter by Name</label>
+                                <input id="filterName" type="text" class="form-control" placeholder="Enter product name">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="filterCategory">Filter by Category</label>
+                                <input id="filterCategory" type="text" class="form-control" placeholder="Enter category">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="filterManufacturer">Filter by Manufacturer</label>
+                                <input id="filterManufacturer" type="text" class="form-control" placeholder="Enter manufacturer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row tm-content-row">
+                        <div class="col-12">
                             <table class="table table-hover table-striped tm-table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
+                                        <th scope="col">ID
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="id">Sort</button>
+                                        </th>
                                         <th scope="col">Name
                                             <button class="btn btn-sm btn-sort btn-light p-1" data-sort="productName">Sort</button>
                                         </th>

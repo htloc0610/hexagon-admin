@@ -95,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${moment(product.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</td>
                 <td>${product.price}</td>
                 <td>${product.totalPurchase}</td>
+                <td>${product.category}</td>
+                <td>${product.manufacturer}</td>
                 <td>
                     <button class="btn btn-primary">Details</button>
                 </td>

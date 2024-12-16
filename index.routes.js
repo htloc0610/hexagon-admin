@@ -10,31 +10,18 @@ router.get('/', ensureAuthenticated, (req, res) => {
     res.render('index', { currentRoute: '/' });
 });
 
+
+// Login, register routes -----------------------------------------------------
 router.get('/login', (req, res) => {
     res.render('login', { layout: 'login-layout', currentRoute: '/login' });
 });
-
-// router.get('/products', ensureAuthenticated, (req, res) => {
-//     res.render('products', { currentRoute: '/products' });
-// });
-
-router.get('/edit-product', ensureAuthenticated, (req, res) => {
-    res.render('edit-product', { currentRoute: '/edit-product' });
-});
+router.post('/register', adminController.createAdmin);
+router.post('/login', adminController.loginAdmin); 
+router.get('/logout', adminController.logoutAdmin);
+router.put('/password', ensureAuthenticated, adminController.changePassword);
 
 
-router.get('/add-product', (req, res) => {
-    res.render('add-product', { currentRoute: '/add-product' });
-});
-
-
-router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadImage, (req, res) => {
-    if (!req.imageUrl) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-    res.json({ message: 'Upload success', imageUrl: req.imageUrl });
-});
-
+// Profile routes -----------------------------------------------------
 router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile', {
         currentRoute: 'profile',
@@ -46,15 +33,19 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
     });
 });
 
-
-
-router.post('/register', adminController.createAdmin);
-router.post('/login', adminController.loginAdmin); 
-router.get('/logout', adminController.logoutAdmin);
 router.put('/profile', ensureAuthenticated, adminController.updateAdmin);
-router.put('/password', ensureAuthenticated, adminController.changePassword);
 
 
+router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadImage, (req, res) => {
+    if (!req.imageUrl) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    res.json({ message: 'Upload success', imageUrl: req.imageUrl });
+});
+
+
+
+// Account routes-----------------------------------------------------
 router.get('/accounts', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -87,6 +78,17 @@ router.get('/account/:id', ensureAuthenticated, async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+});
+
+
+// Products routes -----------------------------------------------------
+
+router.get('/edit-product', ensureAuthenticated, (req, res) => {
+    res.render('edit-product', { currentRoute: '/edit-product' });
+});
+
+router.get('/add-product', (req, res) => {
+    res.render('add-product', { currentRoute: '/add-product' });
 });
 
 

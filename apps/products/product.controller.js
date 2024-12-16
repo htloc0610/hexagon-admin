@@ -26,6 +26,14 @@ const productController = {
         } catch (error) {
             throw new Error('Error retrieving manufacturers: ' + error.message);
         }
+    },
+    async getPaginatedProducts(offset, limit) {
+        try {
+            const products = await productService.getPaginatedProducts(offset, limit);
+            return products;
+        } catch (error) {
+            throw new Error('Error retrieving paginated products: ' + error.message);
+        }
     }
 };
 

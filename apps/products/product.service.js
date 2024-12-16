@@ -33,6 +33,17 @@ const productService = {
         } catch (error) {
             throw new Error('Error retrieving manufacturers: ' + error.message);
         }
+    },
+    async getPaginatedProducts(offset, limit) {
+        try {
+            const products = await Product.findAll({
+                offset,
+                limit
+            });
+            return products.map(product => product.dataValues);
+        } catch (error) {
+            throw new Error('Error retrieving paginated products: ' + error.message);
+        }
     }
 };
 

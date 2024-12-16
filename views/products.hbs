@@ -2,7 +2,7 @@
     <div class="container tm-mt-big tm-mb-big">
         <div class="row">
             <div class="col-12 mx-auto">
-                <div class="tm-bg-primary-dark tm-block tm-block-products">
+                <div class="tm-bg-primary-dark tm-block tm-block-products tm-block-h-auto">
                     <div class="row">
                         <div class="col-12">
                             <h2 class="tm-block-title d-inline-block">Product List</h2>
@@ -10,40 +10,33 @@
                     </div>
                     <div class="row tm-content-row">
                         <div class="col-12">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-striped tm-table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Select</th>
-                                            <th scope="col">Name
-                                                <button class="btn btn-sm btn-sort btn-light p-1" data-sort="productName">Sort</button>
-                                            </th>
-                                            <th scope="col">Category
-                                                <button class="btn btn-sm btn-sort btn-light p-1" data-sort="category">Sort</button>
-                                            </th>
-                                            <th scope="col">Manufacturer
-                                                <button class="btn btn-sm btn-sort btn-light p-1" data-sort="manufacturer">Sort</button>
-                                            </th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{#each products}}
-                                        <tr>
-                                            <th scope="row"><input type="checkbox" /></th>
-                                            <td class="tm-product-name">{{this.productName}}</td>
-                                            <td>{{this.category}}</td>
-                                            <td>{{this.manufacturer}}</td>
-                                            <td>
-                                                <a href="#" class="tm-product-delete-link">
-                                                    <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        {{/each}}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table table-hover table-striped tm-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Select</th>
+                                        <th scope="col">Name
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="productName">Sort</button>
+                                        </th>
+                                        <th scope="col">Category
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="category">Sort</button>
+                                        </th>
+                                        <th scope="col">Manufacturer
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="manufacturer">Sort</button>
+                                        </th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTable">
+                                    <!-- Products will be inserted here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row tm-content-row">
+                        <div class="col-12 d-flex justify-content-between align-items-center">
+                            <button class="btn btn-primary" id="prevPage">Previous</button>
+                            <span id="pageIndicator" class="page-indicator-highlight">Page 1</span>
+                            <button class="btn btn-primary" id="nextPage">Next</button>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sortButtons = document.querySelectorAll('.btn-sort');
     const productsTable = document.getElementById('productsTable');
+    const prevPageButton = document.getElementById('prevPage');
+    const nextPageButton = document.getElementById('nextPage');
+    const pageIndicator = document.getElementById('pageIndicator');
     let sortOrder = 'asc'; // Default sort order
+    let currentPage = 1;
     let currentSortKey = ''; // Track the current sort key
     let productsData = []; // Store the fetched products data
 
@@ -13,6 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
             sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
             sortTable(sortKey);
         });
+    });
+
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            fetchProducts(currentPage - 1);
+        }
+    });
+
+    nextPageButton.addEventListener('click', () => {
+        fetchProducts(currentPage + 1);
     });
 
     function sortTable(sortKey) {
@@ -30,16 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTable(sortedRows);
     }
 
-    function fetchProducts() {
-        fetch('/api/products')
+    function fetchProducts(page) {
+        fetch(`/api/products?page=${page}`)
             .then(response => response.json())
             .then(data => {
                 productsData = data; // Store the fetched data
+                currentPage = page;
                 if (currentSortKey) {
                     sortTable(currentSortKey); // Apply sorting if a sort key is set
                 } else {
                     renderTable(productsData);
                 }
+                updatePagination(data.length);
             })
             .catch(error => console.error('Error fetching products:', error));
     }
@@ -63,5 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    fetchProducts();
+    function updatePagination(dataLength) {
+        pageIndicator.textContent = `Page ${currentPage}`;
+        prevPageButton.disabled = currentPage === 1;
+        nextPageButton.style.visibility = dataLength < 10 ? 'hidden' : '';
+        prevPageButton.style.visibility = currentPage === 1 ? 'hidden' : '';
+    }
+
+    fetchProducts(currentPage);
 });

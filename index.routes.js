@@ -104,6 +104,18 @@ router.get('/products', async (req, res) => {
     }
 });
 
+router.get('/api/products', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+        const products = await productController.getPaginatedProducts(offset, limit);
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 
 module.exports = router;

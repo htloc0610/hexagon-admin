@@ -40,24 +40,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row tm-content-row">
-                        <div class="col-6">
-                            <h3 class="tm-block-title">Categories</h3>
-                            <ul class="list-group">
-                                {{#each categories}}
-                                <li class="list-group-item">{{this}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                        <div class="col-6">
-                            <h3 class="tm-block-title">Manufacturers</h3>
-                            <ul class="list-group">
-                                {{#each manufacturers}}
-                                <li class="list-group-item">{{this}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row tm-content-row mt-5">
+            <div class="col-6">
+                <div class="tm-bg-primary-dark tm-block tm-block-categories">
+                    <h3 class="tm-block-title">Categories</h3>
+                    <ul class="list-group">
+                        {{#each categories}}
+                        <li class="list-group-item">{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="tm-bg-primary-dark tm-block tm-block-manufacturers">
+                    <h3 class="tm-block-title">Manufacturers</h3>
+                    <ul class="list-group">
+                        {{#each manufacturers}}
+                        <li class="list-group-item">{{this}}</li>
+                        {{/each}}
+                    </ul>
                 </div>
             </div>
         </div>

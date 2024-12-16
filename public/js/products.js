@@ -34,8 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const aValue = a[sortKey];
             const bValue = b[sortKey];
 
-            if (sortKey === 'id') {
+            if (sortKey === 'totalPurchase') {
                 return sortOrder === 'asc' ? parseInt(aValue) - parseInt(bValue) : parseInt(bValue) - parseInt(aValue);
+            } else if (sortKey === 'price') {
+                return sortOrder === 'asc' ? parseFloat(aValue) - parseFloat(bValue) : parseFloat(bValue) - parseFloat(aValue);
+            } else if (sortKey === 'createdAt') {
+                return sortOrder === 'asc' ? new Date(aValue) - new Date(bValue) : new Date(bValue) - new Date(aValue);
             } else {
                 return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
             }
@@ -65,14 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach(product => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <th scope="row"><input type="checkbox" /></th>
+                <td>${product.id}</td>
                 <td class="tm-product-name">${product.productName}</td>
-                <td>${product.category}</td>
-                <td>${product.manufacturer}</td>
+                <td>${moment(product.createdAt).format('DD/MM/YYYY, h:mm:ss a')}</td>
+                <td>${product.price}</td>
+                <td>${product.totalPurchase}</td>
                 <td>
-                    <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                    </a>
+                    <button class="btn btn-primary">Details</button>
                 </td>
             `;
             productsTable.appendChild(row);

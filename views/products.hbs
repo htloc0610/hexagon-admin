@@ -13,22 +13,38 @@
                             <table class="table table-hover table-striped tm-table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Select</th>
+                                        <th scope="col">ID</th>
                                         <th scope="col">Name
                                             <button class="btn btn-sm btn-sort btn-light p-1" data-sort="productName">Sort</button>
                                         </th>
-                                        <th scope="col">Category
-                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="category">Sort</button>
+                                        <th scope="col">Creation Time
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="createdAt">Sort</button>
                                         </th>
-                                        <th scope="col">Manufacturer
-                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="manufacturer">Sort</button>
+                                        <th scope="col">Price
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="price">Sort</button>
+                                        </th>
+                                        <th scope="col">Total Purschases
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="totalPurchase">Sort</button>
                                         </th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="productsTable">
-                                    <!-- Products will be inserted here by JavaScript -->
-                                </tbody>
+                                        {{#each products}}
+                                        <tr>
+                                            <th scope="row"><input type="checkbox" /></th>
+                                            <td class="tm-product-name">{{this.productName}}</td>
+                                            <td>{{this.category}}</td>
+                                            <td>{{this.manufacturer}}</td>
+                                            <td>{{formatDate this.createdAt}}</td>
+                                            <td>
+                                                <a href="#" class="tm-product-delete-link">
+                                                    <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
                             </table>
                         </div>
                     </div>

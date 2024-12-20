@@ -110,8 +110,14 @@ router.get('/api/products', async (req, res) => {
 
 router.post('/api/add', productController.createProduct);
 
-router.get('/add-product', (req, res) => {
-    res.render('add-product', { currentRoute: '/add-product' });
+router.get('/add-product', async (req, res) => {
+    try {
+        const categories = await productController.getAllCategories();
+        const manufacturers = await productController.getAllManufacturers();
+        res.render('add-product', { categories, manufacturers });
+    } catch (error) {
+        res.status(500).send('Error retrieving categories or manufacturers: ' + error.message);
+    }
 });
 
 router.get('/edit-product', ensureAuthenticated, (req, res) => {

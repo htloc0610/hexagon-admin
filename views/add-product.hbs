@@ -23,11 +23,21 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="category">Category</label>
-                                        <input id="category" name="category" type="text" class="form-control validate" required />
+                                        <select id="category" name="category" class="form-control validate" required>
+                                            <option value="" disabled selected>Select a category</option>
+                                            {{#each categories}}
+                                                <option value="{{this}}">{{this}}</option>
+                                            {{/each}}
+                                        </select>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="manufacturer">Manufacturer</label>
-                                        <input id="manufacturer" name="manufacturer" type="text" class="form-control validate" required />
+                                        <select id="manufacturer" name="manufacturer" class="form-control validate" required>
+                                            <option value="" disabled selected>Select a manufacturer</option>
+                                            {{#each manufacturers}}
+                                                <option value="{{this}}">{{this}}</option>
+                                            {{/each}}
+                                        </select>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="price">Price</label>
@@ -35,7 +45,6 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="rating">Rating (1-5) <i class="fas fa-star"></i> </label>
-                                        
                                         <input id="rating" name="rating" type="number" class="form-control validate" required />
                                     </div>
                                     <div class="form-group mb-3">

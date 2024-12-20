@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
+        // Validate user input
+        if (!validateForm()) {
+            return;
+        }
+
         const formData = new FormData(form);
         const thumbnailFile = formData.get('thumbnail');
         const imagesFiles = formData.getAll('images');
@@ -26,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            formData.append('url', thumbnailUploadData.imageUrl);
+            formData.append('url', thumbnailUploadData.imageUrl); // Use 'url' to match the model
         }
 
         // Upload images if they exist
@@ -51,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 imagesUrls.push(imagesUploadData.imageUrl);
             }
 
-            formData.append('urls', JSON.stringify(imagesUrls));
+            formData.append('urls', JSON.stringify(imagesUrls)); // Use 'urls' to match the model
         }
 
         const formObject = Object.fromEntries(formData.entries());
@@ -74,11 +79,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.reset();
                 document.getElementById('thumbnailPreview').style.display = 'none';
                 document.getElementById('imagesPreview').innerHTML = '';
+                toggleStockQuantity(false); // Hide stock quantity input after form reset
             }
         } catch (error) {
             showNotification(`Error: ${error.message}`, 'alert-danger');
         }
     });
+
+    function validateForm() {
+        const productName = document.getElementById('productName').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const category = document.getElementById('category').value;
+        const manufacturer = document.getElementById('manufacturer').value;
+        const price = parseFloat(document.getElementById('price').value);
+        const rating = parseInt(document.getElementById('rating').value);
+        const status = document.querySelector('input[name="status"]:checked');
+        const stockQuantity = parseInt(document.getElementById('stock_quantity').value);
+        const thumbnail = document.getElementById('thumbnail').files[0];
+
+        if (!productName || !description || !category || !manufacturer || !price || !rating || !status || !thumbnail) {
+            showNotification('All fields are required!', 'alert-danger');
+            return false;
+        }
+
+        if (price <= 0) {
+            showNotification('Price must be greater than 0!', 'alert-danger');
+            return false;
+        }
+
+        if (rating < 1 || rating > 5 || !Number.isInteger(rating)) {
+            showNotification('Rating must be an integer between 1 and 5!', 'alert-danger');
+            return false;
+        }
+
+        if (status.value === 'On stock' && (stockQuantity <= 0 || !Number.isInteger(stockQuantity))) {
+            showNotification('Stock quantity must be greater than 0 when On stock is chosen!', 'alert-danger');
+            return false;
+        }
+
+        return true;
+    }
 
     function showNotification(message, alertClass) {
         notification.textContent = message;
@@ -121,6 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 reader.readAsDataURL(file);
             });
+        }
+    }
+
+    window.toggleStockQuantity = function(show) {
+        const stockQuantityGroup = document.getElementById('stockQuantityGroup');
+        const stockQuantityInput = document.getElementById('stock_quantity');
+        if (show) {
+            stockQuantityGroup.style.display = 'block';
+        } else {
+            stockQuantityGroup.style.display = 'none';
+            stockQuantityInput.value = 0; // Set stock quantity to 0
         }
     }
 });

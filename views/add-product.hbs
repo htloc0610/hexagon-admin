@@ -48,8 +48,22 @@
                                         <input id="rating" name="rating" type="number" class="form-control validate" required />
                                     </div>
                                     <div class="form-group mb-3">
+                                        <label>Status</label>
+                                        <div>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status" value="On stock" onclick="toggleStockQuantity(true)" required> On stock
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status" value="Out of stock" onclick="toggleStockQuantity(false)"> Out of stock
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="status" value="Suspend" onclick="toggleStockQuantity(false)"> Suspend
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3" id="stockQuantityGroup" style="display: none;">
                                         <label for="stock_quantity">Stock Quantity</label>
-                                        <input id="stock_quantity" name="stock_quantity" type="number" class="form-control validate" required />
+                                        <input id="stock_quantity" name="stock_quantity" type="number" class="form-control validate" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">

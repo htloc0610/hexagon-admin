@@ -9,7 +9,8 @@
                 </div>
                 <div class="row tm-content-row">
                     <div class="col-12">
-                        <form action="/api/products" method="POST" enctype="multipart/form-data" class="tm-edit-product-form">
+                        <div id="notification" class="alert" style="display: none;"></div>
+                        <form id="addProductForm" enctype="multipart/form-data" class="tm-edit-product-form">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
@@ -33,6 +34,11 @@
                                         <input id="price" name="price" type="number" step="0.01" class="form-control validate" required />
                                     </div>
                                     <div class="form-group mb-3">
+                                        <label for="rating">Rating (1-5) <i class="fas fa-star"></i> </label>
+                                        
+                                        <input id="rating" name="rating" type="number" class="form-control validate" required />
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label for="stock_quantity">Stock Quantity</label>
                                         <input id="stock_quantity" name="stock_quantity" type="number" class="form-control validate" required />
                                     </div>
@@ -41,7 +47,7 @@
                                     <div class="form-group mb-3 d-flex align-items-center justify-content-between">
                                         <label for="thumbnail" class="mb-0">Thumbnail</label>
                                         <button type="button" class="btn btn-primary" onclick="document.getElementById('thumbnail').click();">Upload Thumbnail</button>
-                                        <input id="thumbnail" name="thumbnail" typ  e="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" />
+                                        <input id="thumbnail" name="thumbnail" type="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" />
                                     </div>
                                     <img id="thumbnailPreview" src="#" alt="Thumbnail Preview" class="img-fluid mt-2" style="display: none; max-width: 100px;" />
                                     <div class="form-group mb-3 d-flex align-items-center justify-content-between">
@@ -62,39 +68,4 @@
         </div>
     </div>
 </div>
-<script>
-    function previewThumbnail(event) {
-        const thumbnail = document.getElementById('thumbnail');
-        const thumbnailPreview = document.getElementById('thumbnailPreview');
-        const file = thumbnail.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                thumbnailPreview.src = e.target.result;
-                thumbnailPreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function previewImages(event) {
-        const images = document.getElementById('images');
-        const imagesPreview = document.getElementById('imagesPreview');
-        imagesPreview.innerHTML = '';
-        const files = images.files;
-        if (files) {
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'img-fluid mt-2';
-                    img.style.maxWidth = '100px';
-                    img.style.marginRight = '10px';
-                    imagesPreview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-    }
-</script>
+<script src="/js/addProduct.js"></script>

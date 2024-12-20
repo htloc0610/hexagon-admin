@@ -36,7 +36,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 router.put('/profile', ensureAuthenticated, adminController.updateAdmin);
 
 
-router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadImage, (req, res) => {
+router.post('/imageUpload', uploadPhoto.array('imageUpload', 1), resizeAndUploadImage, (req, res) => {
     if (!req.imageUrl) {
         return res.status(400).json({ message: 'No file uploaded' });
     }

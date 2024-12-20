@@ -48,9 +48,7 @@ const productService = {
     // Tạo sản phẩm mới
     async createProduct(productData) {
         try {
-            console.log(productData);
             const newProduct = await Product.create(productData); // Tạo sản phẩm
-            console.log(newProduct);
             return newProduct;
         } catch (error) {
             throw new Error('Error creating product: ' + error.message);

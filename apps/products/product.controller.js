@@ -4,7 +4,6 @@ const productController = {
     async getAllProducts() {
         try {
             const products = await productService.getAllProducts();
-            // console.log(products);
             return products;
         } catch (error) {
             throw new Error('Error retrieving products: ' + error.message);
@@ -39,9 +38,8 @@ const productController = {
     async createProduct(req, res) {
         try {
             const productData = req.body; // Dữ liệu từ body của request
-            // console.log(productData)
+            console.log(productData);
             const newProduct = await productService.createProduct(productData);
-            console.log(newProduct);
             res.status(201).json(newProduct); // Trả về sản phẩm mới với mã trạng thái 201
         } catch (error) {
             res.status(400).json({ message: error.message }); // Lỗi dữ liệu đầu vào

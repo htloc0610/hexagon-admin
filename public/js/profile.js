@@ -117,9 +117,9 @@ profileForm.addEventListener('submit', async function (e) {
     if (profileImgFile && profileImgFile.size > 0) {
         // Upload the image first
         const imageUploadFormData = new FormData();
-        imageUploadFormData.append('profileImg', profileImgFile);
+        imageUploadFormData.append('imageUpload', profileImgFile);
 
-        const imageUploadResponse = await fetch('/profileImg', {
+        const imageUploadResponse = await fetch('/imageUpload', {
             method: 'POST',
             body: imageUploadFormData
         });

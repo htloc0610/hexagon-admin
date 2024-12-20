@@ -120,10 +120,17 @@ router.get('/add-product', async (req, res) => {
     }
 });
 
-router.get('/edit-product', (req, res) => {
-    res.render('edit-product', { currentRoute: '/edit-product' });
+router.get('/edit-product/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await productController.getProductById(productId);
+        const categories = await productController.getAllCategories();
+        const manufacturers = await productController.getAllManufacturers();
+        res.render('edit-product', { product, categories, manufacturers });
+    } catch (error) {
+        res.status(500).send('Error retrieving product details: ' + error.message);
+    }
 });
-
 
 
 

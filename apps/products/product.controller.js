@@ -1,6 +1,15 @@
 const productService = require('./product.service');
 
 const productController = {
+
+    async getProductById(id) {
+        try {
+            const product = await productService.getProductById(id);
+            return product.dataValues;
+        } catch (error) {
+            throw new Error('Error retrieving product: ' + error.message);
+        }
+    },
     async getAllProducts() {
         try {
             const products = await productService.getAllProducts();

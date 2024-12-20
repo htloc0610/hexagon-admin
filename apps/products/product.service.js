@@ -2,6 +2,19 @@ const Product = require('./product.model'); // Đường dẫn tới model Produ
 const { Op } = require('sequelize');
 
 const productService = {
+
+    async getProductById(id) {
+        try {
+            const product = await Product.findByPk(id);
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            return product;
+        } catch (error) {
+            throw new Error('Error retrieving product: ' + error.message);
+        }
+    },
+
     async getAllProducts() {
         try {
             const products = await Product.findAll();

@@ -120,7 +120,7 @@ router.get('/add-product', async (req, res) => {
     }
 });
 
-router.get('/edit-product', ensureAuthenticated, (req, res) => {
+router.get('/edit-product', (req, res) => {
     res.render('edit-product', { currentRoute: '/edit-product' });
 });
 

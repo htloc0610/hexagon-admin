@@ -34,6 +34,18 @@ const productController = {
         } catch (error) {
             throw new Error('Error retrieving paginated products: ' + error.message);
         }
+    },
+    // Tạo sản phẩm mới
+    async createProduct(req, res) {
+        try {
+            const productData = req.body; // Dữ liệu từ body của request
+            // console.log(productData)
+            const newProduct = await productService.createProduct(productData);
+            console.log(newProduct);
+            res.status(201).json(newProduct); // Trả về sản phẩm mới với mã trạng thái 201
+        } catch (error) {
+            res.status(400).json({ message: error.message }); // Lỗi dữ liệu đầu vào
+        }
     }
 };
 

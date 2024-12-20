@@ -108,7 +108,7 @@ router.get('/api/products', async (req, res) => {
     }
 });
 
-router.post('/api/products', ensureAuthenticated, productController.createProduct);
+router.post('/api/add', productController.createProduct);
 
 router.get('/add-product', (req, res) => {
     res.render('add-product', { currentRoute: '/add-product' });

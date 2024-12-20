@@ -82,16 +82,6 @@ router.get('/account/:id', ensureAuthenticated, async (req, res) => {
 
 
 // Products routes -----------------------------------------------------
-
-router.get('/edit-product', ensureAuthenticated, (req, res) => {
-    res.render('edit-product', { currentRoute: '/edit-product' });
-});
-
-router.get('/add-product', (req, res) => {
-    res.render('add-product', { currentRoute: '/add-product' });
-});
-
-
 router.get('/products', async (req, res) => {
     try {
         const products = await productController.getAllProducts();
@@ -117,6 +107,18 @@ router.get('/api/products', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+router.post('/api/products', ensureAuthenticated, productController.createProduct);
+
+router.get('/add-product', (req, res) => {
+    res.render('add-product', { currentRoute: '/add-product' });
+});
+
+router.get('/edit-product', ensureAuthenticated, (req, res) => {
+    res.render('edit-product', { currentRoute: '/edit-product' });
+});
+
+
 
 
 

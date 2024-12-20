@@ -132,6 +132,16 @@ router.get('/edit-product/:id', async (req, res) => {
     }
 });
 
+router.post('/api/edit-product', async (req, res) => {
+    try {
+        const productData = req.body;
+        const updatedProduct = await productController.updateProduct(productData);
+        res.json({ message: 'Product updated successfully', product: updatedProduct });
+    } catch (error) {
+        res.status(500).send('Error updating product: ' + error.message);
+    }
+});
+
 
 
 

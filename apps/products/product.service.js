@@ -66,7 +66,19 @@ const productService = {
         } catch (error) {
             throw new Error('Error creating product: ' + error.message);
         }
-    }
+    },
+    async updateProduct(productData) {
+        try {
+            const product = await Product.findByPk(productData.productId);
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            await product.update(productData);
+            return product;
+        } catch (error) {
+            throw new Error('Error updating product: ' + error.message);
+        }
+    },
 };
 
 module.exports = productService;

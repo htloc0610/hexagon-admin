@@ -13,6 +13,7 @@
                         <div class="col-12">
                             <div id="notification" class="alert" style="display: none;"></div>
                             <form id="editProductForm" enctype="multipart/form-data" class="tm-edit-product-form">
+                                <input type="hidden" id="productId" name="productId" value="{{product.id}}" />
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
@@ -71,18 +72,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3 d-flex align-items-center justify-content-between">
                                             <label for="thumbnail" class="mb-0">Thumbnail</label>
-                                            <button type="button" class="btn btn-primary" onclick="document.getElementById('thumbnail').click();" disabled>Upload Thumbnail</button>
-                                            <input id="thumbnail" name="thumbnail" type="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" disabled />
+                                            <button id="thumbnail-btn" type="button" style="display: none;" class="btn btn-primary" onclick="document.getElementById('thumbnail').click();">Upload Thumbnail</button>
+                                            <input id="thumbnail" name="url" type="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" disabled />
                                         </div>
                                         <img id="thumbnailPreview" src="{{product.url}}" alt="Thumbnail Preview" class="img-fluid mt-2" style="max-width: 100px;" />
                                         <div class="form-group mb-3 d-flex align-items-center justify-content-between">
                                             <label for="images" class="mb-0">Images (Can upload multiple)</label>
-                                            <button type="button" class="btn btn-primary" onclick="document.getElementById('images').click();" disabled>Upload Images</button>
-                                            <input id="images" name="images" type="file" class="form-control validate" accept="image/*" multiple style="display: none;" onchange="previewImages(event)" disabled />
+                                            <button id="images-btn" type="button" class="btn btn-primary" style="display: none;" onclick="document.getElementById('images').click();">Upload Images</button>
+                                            <input id="images" name="urls" type="file" class="form-control validate" accept="image/*" multiple style="display: none;" onchange="previewImages(event)" disabled />
                                         </div>
                                         <div id="imagesPreview" class="mt-2">
                                             {{#each product.urls}}
-                                                <img src="{{this}}" alt="Image Preview" class="img-fluid mt-2" style="max-width: 100px; margin-right: 10px;" />
+                                                <div class="img-container" style="position: relative; display: inline-block;">
+                                                    <img src="{{this}}" alt="Image Preview" class="img-fluid mt-2" style="max-width: 100px; margin-right: 10px;" />
+                                                    <button type="button" class="btn btn-danger btn-sm delete-image-btn" style="position: absolute; top: 0; right: 0;" data-url="{{this}}">X</button>
+                                                </div>
                                             {{/each}}
                                         </div>
                                     </div>

@@ -53,6 +53,15 @@ const productController = {
         } catch (error) {
             res.status(400).json({ message: error.message }); // Lỗi dữ liệu đầu vào
         }
+    },
+    async updateProduct(productData) {
+        try {
+            console.log(productData);
+            const updatedProduct = await productService.updateProduct(productData);
+            return updatedProduct;
+        } catch (error) {
+            throw new Error('Error updating product: ' + error.message);
+        }
     }
 };
 

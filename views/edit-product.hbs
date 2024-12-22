@@ -72,26 +72,35 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3 d-flex align-items-center justify-content-between">
                                             <label for="thumbnail" class="mb-0">Thumbnail</label>
-                                            <button id="thumbnail-btn" type="button" style="display: none;" class="btn btn-primary" onclick="document.getElementById('thumbnail').click();">Upload Thumbnail</button>
-                                            <input id="thumbnail" name="url" type="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" disabled />
+                                            <button id="thumbnail-btn" type="button" style="display: none;" class="btn btn-primary" onclick="document.getElementById('thumbnail').click();">Change Thumbnail</button>
+                                            <input id="thumbnail" name="thumbnail" type="file" class="form-control validate" accept="image/*" style="display: none;" onchange="previewThumbnail(event)" />
+                                        </div>
+                                        <div class=" mb-3 d-flex align-items-center justify-content-between" style="background: blue;" id="thumbnailPreviewText">
+                                            THERE IS A THUMBNAIL
+                                        </div>
+                                        <div class="form-group mb-3 d-flex align-items-center justify-content-between">
+                                            <input id="url" name="url" type="text" class="form-control validate" style="display: none;" value="{{product.url}}" />
+                                        </div>
+                                        <div class="form-group mb-3 d-flex align-items-center justify-content-between">
+                                            <input id="urls" name="urls" type="text" class="form-control validate" style="display: none;" value="{{json product.urls}}" />
                                         </div>
                                         <img id="thumbnailPreview" src="{{product.url}}" alt="Thumbnail Preview" class="img-fluid mt-2" style="max-width: 100px;" />
                                         <div class="form-group mb-3 d-flex align-items-center justify-content-between">
                                             <label for="images" class="mb-0">Images (Can upload multiple)</label>
-                                            <button id="images-btn" type="button" class="btn btn-primary" style="display: none;" onclick="document.getElementById('images').click();">Upload Images</button>
-                                            <input id="images" name="urls" type="file" class="form-control validate" accept="image/*" multiple style="display: none;" onchange="previewImages(event)" disabled />
+                                            <button id="images-btn" type="button" class="btn btn-primary" style="display: none;" onclick="document.getElementById('images').click();">Add Images</button>
+                                            <input id="images" name="images" type="file" class="form-control validate" accept="image/*" multiple style="display: none;" onchange="previewImages(event)" value="{{product.urls}}" />
                                         </div>
                                         <div id="imagesPreview" class="mt-2">
                                             {{#each product.urls}}
                                                 <div class="img-container" style="position: relative; display: inline-block;">
                                                     <img src="{{this}}" alt="Image Preview" class="img-fluid mt-2" style="max-width: 100px; margin-right: 10px;" />
-                                                    <button type="button" class="btn btn-danger btn-sm delete-image-btn" style="position: absolute; top: 0; right: 0;" data-url="{{this}}">X</button>
+                                                    <button type="button" class="btn btn-danger btn-sm delete-image-btn" style="position: absolute; top: 0; right: 0; font-size: 0.7rem; padding: 0.2rem 0.4rem;" data-url="{{this}}">X</button>
                                                 </div>
                                             {{/each}}
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button type="submit" class="btn btn-primary btn-block text-uppercase" disabled>Save Changes</button>
+                                        <button type="submit" class="btn btn-primary btn-block text-uppercase">Save Changes</button>
                                     </div>
                                 </div>
                             </form>

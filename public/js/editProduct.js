@@ -15,12 +15,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-
+    
+        console.log('Form submission started');
+    
         const formData = new FormData(form);
         const productId = formData.get('productId'); // Retrieve the product ID from the hidden input
         const productData = Object.fromEntries(formData.entries());
-
+    
+        console.log('Form data:', productData);
+    
+        const thumbnailFile = formData.get('thumbnail');
+        const thumbnailPreviewText = document.getElementById('thumbnailPreviewText');
+        
+        // Upload the thumbnail first if it exists
+        if (thumbnailFile && thumbnailFile.size > 0) {
+            console.log('Uploading thumbnail...');
+            
+            const thumbnailUploadFormData = new FormData();
+            thumbnailUploadFormData.append('imageUpload', thumbnailFile);
+    
+            try {
+                const thumbnailUploadResponse = await fetch('/imageUpload', {
+                    method: 'POST',
+                    body: thumbnailUploadFormData
+                });
+    
+                const thumbnailUploadData = await thumbnailUploadResponse.json();
+    
+                if (thumbnailUploadData.message !== 'Upload success') {
+                    showNotification('Error uploading thumbnail', 'alert-danger');
+                    return;
+                }
+    
+                productData.url = thumbnailUploadData.imageUrl[0];
+                console.log('Thumbnail uploaded successfully:', thumbnailUploadData.imageUrl);
+            } catch (error) {
+                console.error('Error uploading thumbnail:', error);
+                showNotification('Error uploading thumbnail', 'alert-danger');
+                return;
+            }
+        }
+    
         try {
+            console.log('Submitting form data:', productData);
             const response = await fetch(`/api/edit-product`, {
                 method: 'POST',
                 body: JSON.stringify(productData),
@@ -28,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             const data = await response.json();
-
+    
             if (data.error) {
                 showNotification(data.error, 'alert-danger');
             } else {
@@ -39,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 editButton.style.display = 'block';
             }
         } catch (error) {
+            console.error('Error submitting form:', error);
             showNotification(`Error: ${error.message}`, 'alert-danger');
         }
     });
@@ -70,40 +108,64 @@ document.addEventListener('DOMContentLoaded', () => {
     window.previewImages = function(event) {
         const images = document.getElementById('images');
         const imagesPreview = document.getElementById('imagesPreview');
+        const urlsInput = document.getElementById('urls');
         imagesPreview.innerHTML = '';
         const files = images.files;
+        let urls = [];
+    
         if (files) {
-            Array.from(files).forEach(file => {
+            Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'img-container';
+                    imgContainer.style.position = 'relative';
+                    imgContainer.style.display = 'inline-block';
+    
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'img-fluid mt-2';
                     img.style.maxWidth = '100px';
                     img.style.marginRight = '10px';
-                    imagesPreview.appendChild(img);
+    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.type = 'button';
+                    deleteBtn.className = 'btn btn-danger btn-sm delete-image-btn';
+                    deleteBtn.style.position = 'absolute';
+                    deleteBtn.style.top = '0';
+                    deleteBtn.style.right = '0';
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.dataset.index = index;
+    
+                    deleteBtn.addEventListener('click', function() {
+                        urls.splice(deleteBtn.dataset.index, 1);
+                        urlsInput.value = JSON.stringify(urls);
+                        imgContainer.remove();
+                    });
+    
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(deleteBtn);
+                    imagesPreview.appendChild(imgContainer);
+    
+                    urls.push(e.target.result);
+                    urlsInput.value = JSON.stringify(urls);
                 };
                 reader.readAsDataURL(file);
             });
         }
-    }
-
-    // Display existing images on page load
-    function displayExistingImages() {
-        const imagesPreview = document.getElementById('imagesPreview');
-        const existingImages = JSON.parse(document.getElementById('existingImages').value || '[]');
-        imagesPreview.innerHTML = '';
-        existingImages.forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = 'img-fluid mt-2';
-            img.style.maxWidth = '100px';
-            img.style.marginRight = '10px';
-            imagesPreview.appendChild(img);
-        });
-    }
-
-    displayExistingImages();
+    };
+    
+    // Handle image deletion
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-image-btn')) {
+            const index = event.target.dataset.index;
+            const urlsInput = document.getElementById('urls');
+            let urls = JSON.parse(urlsInput.value);
+            urls.splice(index, 1);
+            urlsInput.value = JSON.stringify(urls);
+            event.target.parentElement.remove();
+        }
+    });
 
     window.toggleStockQuantity = function(show) {
         const stockQuantityGroup = document.getElementById('stockQuantityGroup');

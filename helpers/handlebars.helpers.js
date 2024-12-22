@@ -28,5 +28,8 @@ module.exports = {
     },
     isActive: function (currentRoute, route, options) {
         return currentRoute === route ? options.fn(this) : options.inverse(this);
+    },
+    json: function (context) {
+        return JSON.stringify(context);
     }
 };

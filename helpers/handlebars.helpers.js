@@ -31,5 +31,12 @@ module.exports = {
     },
     json: function (context) {
         return JSON.stringify(context);
+    },
+    formatPaymentMethod: function(paymentMethod) {
+        if (!paymentMethod) return '';
+        return paymentMethod
+            .split('_')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
     }
 };

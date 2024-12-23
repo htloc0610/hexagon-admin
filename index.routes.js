@@ -4,6 +4,8 @@ const adminController = require('./apps/admin/admin.controller');
 const { ensureAuthenticated } = require('./configs/auth');
 const { uploadPhoto, resizeAndUploadImage } = require('./middlewares/imageUploadMiddleware');
 const productController = require('./apps/products/product.controller');
+const orderController = require('./apps/orders/order.controller');
+
 
 
 router.get('/', ensureAuthenticated, (req, res) => {
@@ -141,6 +143,10 @@ router.post('/api/edit-product', async (req, res) => {
         res.status(500).send('Error updating product: ' + error.message);
     }
 });
+
+// Orders routes -----------------------------------------------------
+router.get('/orders', orderController.getAllOrders);
+
 
 
 

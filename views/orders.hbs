@@ -1,0 +1,64 @@
+{{!-- filepath: /e:/Hoc/Subjects on school/Web/Project/admin-new/hexagon-admin/views/orders.hbs --}}
+<div id="reportsPage">
+    <div class="" id="home">
+        <div class="container mt-5">
+            <div class="row tm-content-row">
+                <div class="col-12 tm-block-col">
+                    <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                        <h2 class="tm-block-title">List of Orders</h2>
+                        <p class="text-white">Orders</p>
+                        <div class="form-group">
+                            <select id="filterStatus" class="form-control mb-4">
+                                <option value="">Filter by Status</option>
+                                <option value="paid">Paid</option>
+                                <option value="unpaid">Unpaid</option>
+                                <option value="refunded">Refunded</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Order ID</th>
+                                        <th scope="col">Customer Name</th>
+                                        <th scope="col">Payment Method</th>
+                                        <th scope="col">Shipping Address</th>
+                                        <th scope="col">Order Status</th>
+                                        <th scope="col">Order Date
+                                            <button class="btn btn-sm btn-sort btn-light p-1" data-sort="orderDate">Sort</button>
+                                        </th>
+                                        <th scope="col">Total Price</th>
+                                        <th scope="col">Number of Items</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTable">
+                                    {{#each orders}}
+                                    <tr>
+                                        <th scope="row" data-key="orderId">{{this.id}}</th>
+                                        <td data-key="customerName">{{this.customerName}}</td>
+                                        <td data-key="paymentMethod">{{formatPaymentMethod this.paymentMethod}}</td>
+                                        <td data-key="shippingAddress">{{this.shippingAddress}}</td>
+                                        <td data-key="orderStatus">{{this.paymentStatus}}</td>
+                                        <td data-key="orderDate">{{formatDate this.createdAt}}</td>
+                                        <td data-key="totalPrice">{{this.totalCost}}</td>
+                                        <td data-key="numberOfItems">{{this.numberOfItems}}</td>
+                                        <td>
+                                            <a href="/orders/{{this.id}}" class="btn btn-sm btn-primary">Details</a>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="pagination" class="d-flex justify-content-center mt-3">
+                            <!-- Pagination controls will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/orders.js"></script>

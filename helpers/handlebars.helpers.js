@@ -41,5 +41,8 @@ module.exports = {
     },
     multiply: function(a, b) {
         return a * b;
+    },
+    timeAgo: function(date) {
+        return moment(date).fromNow();
     }
 };

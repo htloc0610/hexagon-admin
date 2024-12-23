@@ -146,6 +146,24 @@ const orderService = {
         } catch (error) {
             throw new Error('Error updating order status: ' + error.message);
         }
+    },
+    async getRecentOrders(limit) {
+        try {
+            const orders = await Order.findAll({
+                limit,
+                order: [['createdAt', 'DESC']],
+                include: [
+                    { model: User, attributes: ['firstName', 'lastName', 'url'] }
+                ]
+            });
+            return orders.map(order => ({
+                ...order.dataValues,
+                customerName: order.user ? `${order.user.firstName} ${order.user.lastName}` : 'Unknown',
+                userAvatar: order.user ? order.user.url : 'img/default-avatar.png'
+            }));
+        } catch (error) {
+            throw new Error('Error retrieving recent orders: ' + error.message);
+        }
     }
 };  
 

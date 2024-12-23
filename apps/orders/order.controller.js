@@ -1,4 +1,6 @@
 const orderService = require('./order.service');
+const moment = require('moment');
+
 
 const orderController = {
     async createOrder(req, res) {
@@ -76,6 +78,20 @@ const orderController = {
             res.status(400).json({ message: error.message });
         }
     },
+    async getDashboard(req, res) {
+        try {
+            const recentOrders = await orderService.getRecentOrders(5); // Fetch 5 most recent orders
+            const formattedOrders = recentOrders.map(order => ({
+                ...order,
+                url: order.user ? order.user.url : 'img/default-avatar.png',
+                createdAt: moment(order.createdAt).fromNow()
+            }));
+
+            res.render('index', { recentOrders: formattedOrders });
+        } catch (error) {
+            res.status(500).send('Error retrieving dashboard data: ' + error.message);
+        }
+    }
 };
 
 module.exports = orderController;

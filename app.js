@@ -79,6 +79,7 @@ hbs.registerHelper('isActive', hbs_helpers.isActive);
 hbs.registerHelper('json', hbs_helpers.json);
 hbs.registerHelper('formatPaymentMethod', hbs_helpers.formatPaymentMethod);
 hbs.registerHelper('multiply', hbs_helpers.multiply);
+hbs.registerHelper('timeAgo', hbs_helpers.timeAgo);
 
 // Thiết lập thư mục tĩnh
 app.use(express.static(path.join(__dirname, '/public')));

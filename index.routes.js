@@ -9,9 +9,8 @@ const {
 const productController = require("./apps/products/product.controller");
 const orderController = require("./apps/orders/order.controller");
 
-router.get("/", ensureAuthenticated, (req, res) => {
-  res.render("index", { currentRoute: "/" });
-});
+router.get("/", orderController.getDashboard);
+
 
 // Login, register routes -----------------------------------------------------
 router.get("/login", (req, res) => {

@@ -48,7 +48,10 @@ const orderService = {
     async getOrderById(orderId) {
         try {
             const order = await Order.findByPk(orderId, {
-                include: [OrderItem],
+                include: [
+                    { model: OrderItem, include: [Product] },
+                    { model: User, attributes: ['firstName', 'lastName'] } // Include user data with first name and last name attributes
+                ],
             });
             return order;
         } catch (error) {
@@ -131,6 +134,20 @@ const orderService = {
             throw new Error('Error deleting order: ' + error.message);
         }
     },
-};
+    async updateOrderStatus(orderId, status) {
+        try {
+            const order = await Order.findByPk(orderId);
+            console.log('Order:', order);
+            if (!order) {
+                throw new Error('Order not found');
+            }
+            order.paymentStatus = status;
+            await order.save();
+            return order;
+        } catch (error) {
+            throw new Error('Error updating order status: ' + error.message);
+        }
+    }
+};  
 
 module.exports = orderService;

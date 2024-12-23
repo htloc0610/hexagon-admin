@@ -15,9 +15,17 @@ const orderController = {
         try {
             const orderId = req.params.id;
             const order = await orderService.getOrderById(orderId);
-            res.status(200).json(order);
+            const orderData = {
+                ...order.dataValues,
+                customerName: order.user ? `${order.user.firstName} ${order.user.lastName}` : 'Unknown',
+                orderItems: order.order_items.map(item => ({
+                    ...item.dataValues,
+                    productName: item.product ? item.product.productName : 'Unknown'
+                }))
+            };
+            res.render('orderDetail', { order: orderData });
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(400).send('Error retrieving order: ' + error.message);
         }
     },
     // const productData = products.map(product => product.dataValues);
@@ -36,6 +44,19 @@ const orderController = {
             res.render('orders', { orders: ordersData });
         } catch (error) {
             res.status(500).send('Error retrieving orders: ' + error.message);
+        }
+    },
+    async updateOrderStatus(req, res) {
+        // console.log('Update order status');
+        try {
+            const orderId = req.params.id;
+            // console.log('Order ID:', orderId);
+            const { status } = req.body;
+            // console.log('Status:', status);
+            const updatedOrder = await orderService.updateOrderStatus(orderId, status);
+            res.json({ message: 'Order status updated successfully', order: updatedOrder });
+        } catch (error) {
+            res.status(500).send('Error updating order status: ' + error.message);
         }
     },
 

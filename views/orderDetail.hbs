@@ -1,0 +1,82 @@
+{{!-- filepath: /e:/Hoc/Subjects on school/Web/Project/admin-new/hexagon-admin/views/orderDetail.hbs --}}
+<div class="container mt-5">
+    <div class="row tm-content-row">
+        <div class="col-12 tm-block-col">
+            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                <h2 class="tm-block-title">Order Details</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-white">Order ID</th>
+                                <td id="orderId" class="text-white">{{order.id}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Customer Name</th>
+                                <td class="text-white">{{order.customerName}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Payment Method</th>
+                                <td class="text-white">{{formatPaymentMethod order.paymentMethod}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Shipping Address</th>
+                                <td class="text-white">{{order.shippingAddress}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Order Status</th>
+                                <td class="text-white">
+                                    <select id="orderStatus" class="form-control d-inline-block w-auto">
+                                        <option value="paid" {{#if (eq order.status "paid")}}selected{{/if}}>Paid</option>
+                                        <option value="unpaid" {{#if (eq order.status "unpaid")}}selected{{/if}}>Unpaid</option>
+                                        <option value="refunded" {{#if (eq order.status "refunded")}}selected{{/if}}>Refunded</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Order Date</th>
+                                <td class="text-white">{{formatDate order.createdAt}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-white">Total Price</th>
+                                <td class="text-white">{{order.totalCost}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 class="tm-block-title mt-4">Order Items</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price at Purchase</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each order.orderItems}}
+                            <tr>
+                                <td>{{this.productId}}</td>
+                                <td>{{this.productName}}</td>
+                                <td>{{this.quantity}}</td>
+                                <td>{{this.priceAtPurchase}}</td>
+                                <td>{{multiply this.quantity this.priceAtPurchase}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="notificationBox" class="alert alert-success mt-3" style="display: none;">
+                    Save Success
+                </div>
+                <button id="saveStatusButton" class="btn btn-sm btn-primary mt-3">Save Changes</button>
+                <a href="/orders" class="btn btn-sm btn-secondary mt-3">Back to Orders</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/orderDetail.js"></script>

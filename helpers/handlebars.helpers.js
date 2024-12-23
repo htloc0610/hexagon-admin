@@ -38,5 +38,8 @@ module.exports = {
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
+    },
+    multiply: function(a, b) {
+        return a * b;
     }
 };

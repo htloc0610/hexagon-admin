@@ -39,7 +39,15 @@
                                         <td data-key="customerName">{{this.customerName}}</td>
                                         <td data-key="paymentMethod">{{formatPaymentMethod this.paymentMethod}}</td>
                                         <td data-key="shippingAddress">{{this.shippingAddress}}</td>
-                                        <td data-key="orderStatus">{{this.paymentStatus}}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="tm-status-circle 
+                                                    {{#if (eq this.paymentStatus 'paid')}}moving{{/if}}
+                                                    {{#if (eq this.paymentStatus 'unpaid')}}pending{{/if}}
+                                                    {{#if (eq this.paymentStatus 'refunded')}}cancelled{{/if}}"></div>
+                                                <div data-key="orderStatus" class="ml-2">{{this.paymentStatus}}</div>
+                                            </div>
+                                        </td>
                                         <td data-key="orderDate">{{formatDate this.createdAt}}</td>
                                         <td data-key="totalPrice">{{this.totalCost}}</td>
                                         <td data-key="numberOfItems">{{this.numberOfItems}}</td>

@@ -47,7 +47,6 @@ const productController = {
     async createProduct(req, res) {
         try {
             const productData = req.body; // Dữ liệu từ body của request
-            console.log(productData);
             const newProduct = await productService.createProduct(productData);
             res.status(201).json(newProduct); // Trả về sản phẩm mới với mã trạng thái 201
         } catch (error) {
@@ -56,7 +55,6 @@ const productController = {
     },
     async updateProduct(productData) {
         try {
-            console.log(productData);
             const updatedProduct = await productService.updateProduct(productData);
             return updatedProduct;
         } catch (error) {

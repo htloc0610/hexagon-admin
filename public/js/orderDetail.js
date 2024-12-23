@@ -1,17 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
     const saveStatusButton = document.getElementById('saveStatusButton');
     const orderStatusSelect = document.getElementById('orderStatus');
     const notificationBox = document.getElementById('notificationBox');
     const orderId = document.getElementById('orderId').textContent;
 
-    console.log('Order ID:', orderId);
 
     if (saveStatusButton) {
         saveStatusButton.addEventListener('click', async () => {
             const newStatus = orderStatusSelect.value;
-            console.log('Save button clicked');
-            console.log(newStatus);
 
             try {
                 const response = await fetch(`/orders/${orderId}`, {

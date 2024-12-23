@@ -137,7 +137,6 @@ const orderService = {
     async updateOrderStatus(orderId, status) {
         try {
             const order = await Order.findByPk(orderId);
-            console.log('Order:', order);
             if (!order) {
                 throw new Error('Order not found');
             }

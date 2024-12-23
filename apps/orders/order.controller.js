@@ -40,19 +40,15 @@ const orderController = {
                     numberOfItems: order.order_items ? order.order_items.length : 0 // Count the number of items in the order
                 };
             });
-            // console.log(ordersData);
             res.render('orders', { orders: ordersData });
         } catch (error) {
             res.status(500).send('Error retrieving orders: ' + error.message);
         }
     },
     async updateOrderStatus(req, res) {
-        // console.log('Update order status');
         try {
             const orderId = req.params.id;
-            // console.log('Order ID:', orderId);
             const { status } = req.body;
-            // console.log('Status:', status);
             const updatedOrder = await orderService.updateOrderStatus(orderId, status);
             res.json({ message: 'Order status updated successfully', order: updatedOrder });
         } catch (error) {

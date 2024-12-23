@@ -12,7 +12,6 @@ const userService = {
     },
 
     async getUserById(userId) {
-        console.log('userId', userId);
         try {
             const user = await User.findByPk(userId); // Sử dụng primary key (id) để tìm người dùng
             if (!user) {

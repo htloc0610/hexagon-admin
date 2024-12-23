@@ -20,20 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
     
-        console.log('Form submission started');
     
         const formData = new FormData(form);
         const productId = formData.get('productId'); // Retrieve the product ID from the hidden input
         const productData = Object.fromEntries(formData.entries());
     
-        console.log('Form data:', productData);
     
         const thumbnailFile = formData.get('thumbnail');
         const thumbnailPreviewText = document.getElementById('thumbnailPreviewText');
         
         // Upload the thumbnail first if it exists
         if (thumbnailFile && thumbnailFile.size > 0) {
-            // console.log('Uploading thumbnail...');
             
             const thumbnailUploadFormData = new FormData();
             thumbnailUploadFormData.append('imageUpload', thumbnailFile);
@@ -52,20 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
     
                 productData.url = thumbnailUploadData.imageUrl[0];
-                // console.log('Thumbnail uploaded successfully:', thumbnailUploadData.imageUrl);
             } catch (error) {
                 console.error('Error uploading thumbnail:', error);
                 showNotification('Error uploading thumbnail', 'alert-danger');
                 return;
             }
         }
-        console.log('Product data urls:', productData.urls);
 
 
         // Upload the images if they exist
         const imagesFiles = formData.getAll('images');
         if (imagesFiles.length > 0) {
-            console.log('Uploading images...');
 
             // Parse productData.urls if it exists and is a JSON string
             let existingUrls = [];
@@ -93,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         throw new Error('Error uploading image');
                     }
                     existingUrls.push(imageUploadData.imageUrl[0]);
-                    console.log('Image uploaded successfully:', imageUploadData.imageUrl);
                 })
                 .catch(error => {
                     console.error('Error uploading image:', error);
@@ -105,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await Promise.all(uploadPromises);
                 productData.urls = existingUrls; // Keep it as an array
-                console.log('All images uploaded successfully:', productData.urls);
             } catch (error) {
                 console.error('Error uploading one or more images:', error);
                 return;

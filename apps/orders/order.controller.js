@@ -81,17 +81,13 @@ const orderController = {
     async getDashboard(req, res) {
         try {
             const recentOrders = await orderService.getRecentOrders(5); // Fetch 5 most recent orders
-            const formattedOrders = recentOrders.map(order => ({
-                ...order,
-                url: order.user ? order.user.url : 'img/default-avatar.png',
-                createdAt: moment(order.createdAt).fromNow()
-            }));
-
-            res.render('index', { recentOrders: formattedOrders });
+            const revenueReport = await orderService.getRevenueReport('day'); // Default to day
+            const topRevenueProducts = await orderService.getTopRevenueProducts('day'); // Default to day
+            res.render('index', { recentOrders, revenueReport, topRevenueProducts });
         } catch (error) {
             res.status(500).send('Error retrieving dashboard data: ' + error.message);
         }
-    }
+    },
 };
 
 module.exports = orderController;

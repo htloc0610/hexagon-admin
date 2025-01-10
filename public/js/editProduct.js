@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Upload the images if they exist
         const imagesFiles = formData.getAll('images');
-        if (imagesFiles.length > 1) {
+        // console.log(imagesFiles);
+        if (imagesFiles.length > 0 && imagesFiles[0].size > 0) {
 
             // Parse productData.urls if it exists and is a JSON string
             let existingUrls = [];
@@ -125,6 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 showNotification(data.error, 'alert-danger');
             } else {
                 showNotification('Product updated successfully!', 'alert-success');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
                 // inputs.forEach(input => input.disabled = true);
                 // editButton.style.display = 'block';
             }

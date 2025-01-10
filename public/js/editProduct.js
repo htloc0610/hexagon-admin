@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Upload the images if they exist
         const imagesFiles = formData.getAll('images');
-        if (imagesFiles.length > 0) {
+        if (imagesFiles.length > 1) {
 
             // Parse productData.urls if it exists and is a JSON string
             let existingUrls = [];
@@ -102,7 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error uploading one or more images:', error);
                 return;
             }
+        } else {
+            // existingUrls = JSON.parse(productData.urls);
+            productData.urls = JSON.parse(productData.urls);
         }
+
 
         // When sending the data, convert productData.urls to a JSON string
         try {
@@ -121,8 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 showNotification(data.error, 'alert-danger');
             } else {
                 showNotification('Product updated successfully!', 'alert-success');
-                inputs.forEach(input => input.disabled = true);
-                editButton.style.display = 'block';
+                // inputs.forEach(input => input.disabled = true);
+                // editButton.style.display = 'block';
             }
         } catch (error) {
             console.error('Error submitting form:', error);

@@ -91,6 +91,7 @@ router.get("/products", async (req, res) => {
 
     const productData = products.map((product) => product.dataValues);
 
+
     res.render("products", {
       products: productData,
       categories,

@@ -3,7 +3,9 @@ const OrderItem = require('./order_item.model');
 const Product = require('../products/product.model');
 const User = require('../users/user.model');
 const moment = require('moment');
-const { Op, sequelize } = require('sequelize');
+const sequelize = require('../../configs/db');
+const { Sequelize, Op } = require('sequelize');
+
 
 const orderService = {
     async createOrder(orderData) {
@@ -161,65 +163,75 @@ const orderService = {
             return orders.map(order => ({
                 ...order.dataValues,
                 customerName: order.user ? `${order.user.firstName} ${order.user.lastName}` : 'Unknown',
-                userAvatar: order.user ? order.user.url : 'img/default-avatar.png'
+                userAvatar: order.user ? order.user.url : 'img/default-avatar.png',
             }));
         } catch (error) {
             throw new Error('Error retrieving recent orders: ' + error.message);
         }
     },
-    async getRevenueReport(timeRange) {
+    async getRevenueReport(startDate, endDate) {
         try {
-            const startDate = moment().startOf(timeRange).toDate();
-            const endDate = moment().endOf(timeRange).toDate();
-            const orders = await Order.findAll({
+            const revenueData = await Order.findAll({
                 where: {
                     createdAt: {
-                        [Op.between]: [startDate, endDate]
-                    }
+                        [Op.between]: [startDate, endDate],
+                    },
                 },
                 attributes: [
-                    [sequelize.fn('date_trunc', timeRange, sequelize.col('createdAt')), 'date'],
-                    [sequelize.fn('sum', sequelize.col('totalCost')), 'totalRevenue']
+                    [sequelize.fn('DATE', sequelize.col('createdAt')), 'date'],
+                    [sequelize.fn('SUM', sequelize.col('totalCost')), 'totalRevenue'],
                 ],
                 group: ['date'],
-                order: [['date', 'ASC']]
+                order: [['date', 'ASC']],
             });
-            return orders.map(order => ({
-                date: order.dataValues.date,
-                totalRevenue: parseFloat(order.dataValues.totalRevenue)
+    
+            return revenueData.map(item => ({
+                date: item.dataValues.date,
+                totalRevenue: parseFloat(item.dataValues.totalRevenue),
             }));
         } catch (error) {
             throw new Error('Error retrieving revenue report: ' + error.message);
         }
     },
-
-    async getTopRevenueProducts(timeRange) {
+    
+    async getTopRevenueProducts(startDate, endDate) {
         try {
-            const startDate = moment().startOf(timeRange).toDate();
-            const endDate = moment().endOf(timeRange).toDate();
-            const orderItems = await OrderItem.findAll({
-                where: {
-                    createdAt: {
-                        [Op.between]: [startDate, endDate]
-                    }
-                },
-                include: [{ model: Product, attributes: ['name'] }],
-                attributes: [
-                    'productId',
-                    [sequelize.fn('sum', sequelize.col('priceAtPurchase')), 'totalRevenue']
-                ],
-                group: ['productId', 'Product.name'],
-                order: [[sequelize.fn('sum', sequelize.col('priceAtPurchase')), 'DESC']],
-                limit: 10
-            });
-            return orderItems.map(item => ({
-                productName: item.Product.name,
-                totalRevenue: parseFloat(item.dataValues.totalRevenue)
+            const topProducts = await sequelize.query(
+                `
+                SELECT 
+                    p."productName" AS productName,
+                    SUM(oi."priceAtPurchase" * oi.quantity) AS totalRevenue
+                FROM 
+                    order_items oi
+                INNER JOIN 
+                    products p
+                ON 
+                    oi."productId" = p.id
+                WHERE 
+                    oi."createdAt" BETWEEN :startDate AND :endDate
+                GROUP BY 
+                    p."productName"
+                ORDER BY 
+                    totalRevenue DESC
+                LIMIT 10
+                `,
+                {
+                    replacements: { startDate, endDate },
+                    type: Sequelize.QueryTypes.SELECT,
+                }
+            );
+            
+    
+            return topProducts.map(item => ({
+                productName: item.productName,
+                totalRevenue: parseFloat(item.totalRevenue),
             }));
         } catch (error) {
             throw new Error('Error retrieving top revenue products: ' + error.message);
         }
     },
+    
+    
 };  
 
 module.exports = orderService;

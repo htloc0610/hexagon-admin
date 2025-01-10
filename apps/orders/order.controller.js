@@ -80,9 +80,17 @@ const orderController = {
     },
     async getDashboard(req, res) {
         try {
-            const recentOrders = await orderService.getRecentOrders(5); // Fetch 5 most recent orders
-            const revenueReport = await orderService.getRevenueReport('day'); // Default to day
-            const topRevenueProducts = await orderService.getTopRevenueProducts('day'); // Default to day
+            const startDate = moment().startOf('month').toDate();
+            const endDate = moment().endOf('month').toDate();
+
+            const recentOrders = await orderService.getRecentOrders(5);
+            const revenueReport = await orderService.getRevenueReport(startDate, endDate);
+            const topRevenueProducts = await orderService.getTopRevenueProducts(startDate, endDate);
+
+            console.log(recentOrders);
+            console.log(revenueReport);
+            console.log(topRevenueProducts);
+
             res.render('index', { recentOrders, revenueReport, topRevenueProducts });
         } catch (error) {
             res.status(500).send('Error retrieving dashboard data: ' + error.message);

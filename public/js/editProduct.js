@@ -6,16 +6,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnThumbnail = document.getElementById('thumbnail-btn');
     const btnImages = document.getElementById('images-btn');
 
-    // editButton.addEventListener('click', (event) => {
-    //     event.preventDefault();
-    //     isEditMode = true;
-    //     inputs.forEach(input => input.disabled = false);
-    //     btnThumbnail.style.display = 'block';
-    //     btnImages.style.display = 'block';
-    //     editButton.style.display = 'none';
-    //     // Show delete buttons if in edit mode
-    //     document.querySelectorAll('.delete-image-btn').forEach(btn => btn.style.display = 'block');
-    // });
+    // Toggle category input mode
+    const toggleCategoryInputButton = document.getElementById('toggleCategoryInput');
+    const toggleCategoryDropdownButton = document.getElementById('toggleCategoryDropdown');
+    const categoryDropdownContainer = document.getElementById('categoryDropdownContainer');
+    const categoryInputContainer = document.getElementById('categoryInputContainer');
+    const categoryInput = document.getElementById('categoryInput');
+    const categoryDropdown = document.getElementById('category');
+
+    toggleCategoryInputButton.addEventListener('click', () => {
+        categoryDropdownContainer.style.display = 'none';
+        categoryInputContainer.style.display = 'block';
+        categoryInput.value = categoryDropdown.value;
+    });
+
+    toggleCategoryDropdownButton.addEventListener('click', () => {
+        categoryInputContainer.style.display = 'none';
+        categoryDropdownContainer.style.display = 'block';
+        categoryDropdown.value = categoryInput.value;
+    });
+
+    // Toggle manufacturer input mode
+    const toggleManufacturerInputButton = document.getElementById('toggleManufacturerInput');
+    const toggleManufacturerDropdownButton = document.getElementById('toggleManufacturerDropdown');
+    const manufacturerDropdownContainer = document.getElementById('manufacturerDropdownContainer');
+    const manufacturerInputContainer = document.getElementById('manufacturerInputContainer');
+    const manufacturerInput = document.getElementById('manufacturerInput');
+    const manufacturerDropdown = document.getElementById('manufacturer');
+
+    toggleManufacturerInputButton.addEventListener('click', () => {
+        manufacturerDropdownContainer.style.display = 'none';
+        manufacturerInputContainer.style.display = 'block';
+        manufacturerInput.value = manufacturerDropdown.value;
+    });
+
+    toggleManufacturerDropdownButton.addEventListener('click', () => {
+        manufacturerInputContainer.style.display = 'none';
+        manufacturerDropdownContainer.style.display = 'block';
+        manufacturerDropdown.value = manufacturerInput.value;
+    });
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

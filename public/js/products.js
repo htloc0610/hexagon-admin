@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${product.category}</td>
                 <td>${product.manufacturer}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="window.location.href='/edit-product?id=${product.id}'">Details</button>
+                    <button class="btn btn-primary" onclick="window.location.href='/edit-product/${product.id}'">Details</button>
                 </td>
             `;
             productsTable.appendChild(row);

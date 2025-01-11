@@ -13,9 +13,9 @@
                     <div class="tm-bg-primary-dark tm-block">
                         <h2 class="tm-block-title">Revenue Report</h2>
                         <select id="revenueTimeRange" class="form-control mb-3">
-                            <option value="day" {{#if (eq timeRange 'day')}}selected{{/if}}>Day</option>
-                            <option value="week" {{#if (eq timeRange 'week')}}selected{{/if}}>Week</option>
-                            <option value="month" {{#if (eq timeRange 'month')}}selected{{/if}}>Month</option>
+                            <option value="day" {{#if (eq timeRange 'day')}}selected{{/if}}>Day (7 recent days)</option>
+                            <option value="week" {{#if (eq timeRange 'week')}}selected{{/if}}>Week (7 recent weeks)</option>
+                            <option value="month" {{#if (eq timeRange 'month')}}selected{{/if}}>Month (7 recent months)</option>
                         </select>
                         <canvas id="revenueChart"></canvas>
                     </div>
@@ -24,9 +24,9 @@
                     <div class="tm-bg-primary-dark tm-block">
                         <h2 class="tm-block-title">Top Revenue by Product</h2>
                         <select id="topRevenueTimeRange" class="form-control mb-3">
-                            <option value="day" {{#if (eq timeRange 'day')}}selected{{/if}}>Day</option>
-                            <option value="week" {{#if (eq timeRange 'week')}}selected{{/if}}>Week</option>
-                            <option value="month" {{#if (eq timeRange 'month')}}selected{{/if}}>Month</option>
+                            <option value="day" {{#if (eq timeRange 'day')}}selected{{/if}}>Day Day (7 recent days)</option>
+                            <option value="week" {{#if (eq timeRange 'week')}}selected{{/if}}>Week (7 recent weeks)</option>
+                            <option value="month" {{#if (eq timeRange 'month')}}selected{{/if}}>Month (7 recent months)</option>
                         </select>
                         <canvas id="topRevenueChart"></canvas>
                     </div>

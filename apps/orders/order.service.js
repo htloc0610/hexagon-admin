@@ -4,7 +4,7 @@ const Product = require('../products/product.model');
 const User = require('../users/user.model');
 const moment = require('moment');
 const sequelize = require('../../configs/db');
-const { Sequelize, Op } = require('sequelize');
+const { Sequelize, Op, fn, col } = require('sequelize');
 
 
 const orderService = {
@@ -210,35 +210,29 @@ const orderService = {
     
     async getTopRevenueProducts(startDate, endDate) {
         try {
-            const topProducts = await sequelize.query(
-                `
-                SELECT 
-                    p."productName" AS productName,
-                    SUM(oi."priceAtPurchase" * oi.quantity) AS totalRevenue
-                FROM 
-                    order_items oi
-                INNER JOIN 
-                    products p
-                ON 
-                    oi."productId" = p.id
-                WHERE 
-                    oi."createdAt" BETWEEN :startDate AND :endDate
-                GROUP BY 
-                    p."productName"
-                ORDER BY 
-                    totalRevenue DESC
-                LIMIT 10
-                `,
-                {
-                    replacements: { startDate, endDate },
-                    type: Sequelize.QueryTypes.SELECT,
-                }
-            );
-            
+            const topProducts = await OrderItem.findAll({
+                where: {
+                    createdAt: {
+                        [Op.between]: [startDate, endDate],
+                    },
+                },
+                include: [{
+                    model: Product,
+                    attributes: ['productName'],
+                    as: 'product'
+                }],
+                attributes: [
+                    'productId',
+                    [fn('SUM', col('priceAtPurchase')), 'totalRevenue']
+                ],
+                group: ['productId', 'product.productName', 'product.id'],
+                order: [[fn('SUM', col('priceAtPurchase')), 'DESC']],
+                limit: 10
+            });
     
             return topProducts.map(item => ({
-                productName: item.productName,
-                totalRevenue: parseFloat(item.totalRevenue),
+                productName: item.dataValues.product.productName,
+                totalRevenue: parseFloat(item.dataValues.totalRevenue),
             }));
         } catch (error) {
             throw new Error('Error retrieving top revenue products: ' + error.message);

@@ -39,7 +39,7 @@ function showSuccess(message) {
 // Enable editing profile fields
 editButton.addEventListener('click', () => {
     inputs.forEach(input => {
-        if (input.id !== 'email') {
+        if (input.id !== 'email' && input.id !== 'username') {
             input.removeAttribute('disabled');
         }
     });

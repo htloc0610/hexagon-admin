@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(form);
 
+
+
         // Choose category or categoryInput
         if (categoryInput.value.trim()) {
             formData.set('category', categoryInput.value.trim());
@@ -70,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.set('manufacturer', manufacturerDropdown.value);
         }
 
-        console.log(formData);
 
         const thumbnailFile = formData.get('thumbnail');
         const imagesFiles = formData.getAll('images');
@@ -109,18 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const imagesUploadData = await imagesUploadResponse.json();
 
+
                 if (imagesUploadData.message !== 'Upload success') {
                     showNotification('Error uploading images', 'alert-danger');
                     return;
                 }
 
-                imagesUrls.push(imagesUploadData.imageUrl);
+
+                imagesUrls.push(imagesUploadData.imageUrl[0]);
             }
 
-            formData.append('urls', JSON.stringify(imagesUrls)); // Use 'urls' to match the model
+            formData.set('urls', JSON.stringify(imagesUrls)); // Lưu mảng JSON trực tiếp
         }
 
         const formObject = Object.fromEntries(formData.entries());
+        formObject.urls = JSON.parse(formObject.urls); // Đảm bảo đây là JSON array
 
         try {
             const response = await fetch('/api/add', {

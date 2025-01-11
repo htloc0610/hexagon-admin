@@ -52,11 +52,14 @@
                                 <tbody id="productsTable">
                                         {{#each products}}
                                         <tr>
-                                            <th scope="row"><input type="checkbox" /></th>
+                                            
+                                            <td class="tm-product-name">{{this.id}}</td>
                                             <td class="tm-product-name">{{this.productName}}</td>
+                                            <td>{{formatDate this.createdAt}}</td>
+                                            <td>{{this.price}}</td>
                                             <td>{{this.category}}</td>
                                             <td>{{this.manufacturer}}</td>
-                                            <td>{{formatDate this.createdAt}}</td>
+                                            <td>{{this.totalPurchase}}</td>
                                             <td>
                                                 <a href="#" class="tm-product-delete-link">
                                                     <i class="far fa-trash-alt tm-product-delete-icon"></i>

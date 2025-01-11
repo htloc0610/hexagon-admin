@@ -1,5 +1,6 @@
 const Product = require('./product.model'); // Đường dẫn tới model Product
-const { Op } = require('sequelize');
+const OrderItem = require('../orders/order_item.model');
+const { Op, fn, col } = require('sequelize');
 
 const productService = {
 
@@ -17,8 +18,39 @@ const productService = {
 
     async getAllProducts() {
         try {
-            const products = await Product.findAll();
-            return products;
+            const products = await Product.findAll({
+                attributes: {
+                    include: [
+                    //   [fn('SUM', col('order_items.quantity')), 'totalPurchase']
+                    ]
+                  },
+                  include: [
+                    {
+                      model: OrderItem,
+                      as: 'order_items',
+                      
+                    }
+                  ],
+                //   group: ['product.id'], // Nhóm theo cột 'id' của bảng Product
+            });
+
+            products.map(product => {
+                product.dataValues.totalPurchase = product.dataValues.order_items.reduce((total, item) => total + item.quantity, 0);
+                return product;
+            });
+
+            // console.log(products);
+
+            const data = products.map(product => ({
+                id: product.dataValues.id,
+                productName: product.dataValues.productName,
+                totalPurchase: product.dataValues.totalPurchase,
+                price: product.dataValues.price
+            }));
+
+            // console.log(data);
+
+            return data;
         } catch (error) {
             throw new Error('Error retrieving products: ' + error.message);
         }
@@ -50,10 +82,29 @@ const productService = {
     async getPaginatedProducts(offset, limit) {
         try {
             const products = await Product.findAll({
-                offset,
-                limit
+                offset: offset,
+                limit: limit,
+                attributes: {
+                    include: [
+                    //   [fn('SUM', col('order_items.quantity')), 'totalPurchase']
+                    ]
+                  },
+                  include: [
+                    {
+                      model: OrderItem,
+                      as: 'order_items',
+                      
+                    }
+                  ],
+                //   group: ['product.id'], // Nhóm theo cột 'id' của bảng Product
             });
-            return products.map(product => product.dataValues);
+
+            const data = products.map(product => {
+                product.dataValues.totalPurchase = product.dataValues.order_items.reduce((total, item) => total + item.quantity, 0);
+                return product;
+            });
+
+            return data.map(product => product.dataValues);
         } catch (error) {
             throw new Error('Error retrieving paginated products: ' + error.message);
         }
@@ -61,7 +112,9 @@ const productService = {
     // Tạo sản phẩm mới
     async createProduct(productData) {
         try {
+            console.log(productData);
             const newProduct = await Product.create(productData); // Tạo sản phẩm
+            console.log(newProduct);
             return newProduct;
         } catch (error) {
             throw new Error('Error creating product: ' + error.message);

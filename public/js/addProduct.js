@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
+            console.log(formObject);
+
             if (data.error) {
                 showNotification(data.error, 'alert-danger');
             } else {

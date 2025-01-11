@@ -44,10 +44,6 @@ const Product = db.define('product', {
         type: DataTypes.JSON, // Sử dụng JSON để lưu danh sách URL
         defaultValue: [],
     },
-    totalPurchase: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-    }
 },
     {
         timestamps: true, // Kích hoạt timestamps

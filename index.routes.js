@@ -9,6 +9,7 @@ const {
 const productController = require("./apps/products/product.controller");
 const orderController = require("./apps/orders/order.controller");
 
+
 router.get("/", orderController.getDashboard);
 
 
@@ -20,6 +21,8 @@ router.post("/register", adminController.createAdmin);
 router.post("/login", adminController.loginAdmin);
 router.get("/logout", adminController.logoutAdmin);
 router.put("/password", ensureAuthenticated, adminController.changePassword);
+
+router.use(ensureAuthenticated);
 
 // Profile routes -----------------------------------------------------
 router.get("/profile", ensureAuthenticated, (req, res) => {
@@ -89,11 +92,8 @@ router.get("/products", async (req, res) => {
     const categories = await productController.getAllCategories();
     const manufacturers = await productController.getAllManufacturers();
 
-    const productData = products.map((product) => product.dataValues);
-
-
     res.render("products", {
-      products: productData,
+      products: products,
       categories,
       manufacturers,
     });

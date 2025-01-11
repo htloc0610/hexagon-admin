@@ -34,21 +34,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Express session
-// app.use(session({
-//     store: MongoStore.create({
-//         mongoUrl: process.env.SESSION_STORE_URI, // Ensure this is correctly set
-//         ttl: 14 * 24 * 60 * 60, // 14 days
-//         autoRemove: 'native'}),
-//     secret: 'penguynSecret',
-//     resave: false,
-//     saveUninitialized: true,
-// }));
-
 app.use(session({
+    store: MongoStore.create({
+        mongoUrl: process.env.SESSION_STORE_URI, // Ensure this is correctly set
+        ttl: 14 * 24 * 60 * 60, // 14 days
+        autoRemove: 'native'}),
     secret: 'penguynSecret',
     resave: false,
     saveUninitialized: true,
 }));
+
+// app.use(session({
+//     secret: 'penguynSecret',
+//     resave: false,
+//     saveUninitialized: true,
+// }));
 
 // Flash middlewares
 app.use(flash());

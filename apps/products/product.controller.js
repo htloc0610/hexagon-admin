@@ -46,6 +46,8 @@ const productController = {
     // Tạo sản phẩm mới
     async createProduct(req, res) {
         try {
+            delete req.body.thumbnail;
+            delete req.body.images;
             const productData = req.body; // Dữ liệu từ body của request
             const newProduct = await productService.createProduct(productData);
             res.status(201).json(newProduct); // Trả về sản phẩm mới với mã trạng thái 201

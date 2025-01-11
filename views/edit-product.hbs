@@ -26,7 +26,7 @@
                                             <label for="category">Category</label>
                                             <div id="categoryDropdownContainer">
                                                 <select id="category" name="category" class="form-control validate" required>
-                                                    <option value="">Select a category</option>
+                                                    <option value="" disabled>Select a category</option>
                                                     {{#each categories}}
                                                         <option value="{{this}}" {{#if (eq this ../product.category)}}selected{{/if}}>{{this}}</option>
                                                     {{/each}}

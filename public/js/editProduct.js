@@ -52,8 +52,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const formData = new FormData(form);
         const productId = formData.get('productId'); // Retrieve the product ID from the hidden input
-        const productData = Object.fromEntries(formData.entries());
+
+        // Choose category or categoryInput
+        if (categoryInput.value.trim()) {
+            formData.set('category', categoryInput.value.trim());
+        } else {
+            formData.set('category', categoryDropdown.value);
+        }
+
+        // Choose manufacturer or manufacturerInput
+        if (manufacturerInput.value.trim()) {
+            formData.set('manufacturer', manufacturerInput.value.trim());
+        } else {
+            formData.set('manufacturer', manufacturerDropdown.value);
+        }
+
+        console.log(formData);
     
+        const productData = Object.fromEntries(formData.entries());
     
         const thumbnailFile = formData.get('thumbnail');
         const thumbnailPreviewText = document.getElementById('thumbnailPreviewText');

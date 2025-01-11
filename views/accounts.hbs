@@ -40,7 +40,7 @@
                                         <th scope="row" data-key="id">{{this.id}}</th>
                                         <td data-key="username">{{this.username}}</td>
                                         <td data-key="email">{{this.email}}</td>
-                                        <td data-key="createdAt">{{formatDate this.createdAt}}</td>
+                                        <td data-key="createdAt">{{this.createdAt}}</td>
                                         <td data-key="role">{{this.role}}</td>
                                         <td>
                                             <a href="/account/{{this.id}}" class="btn btn-sm btn-primary">Details</a>
@@ -60,4 +60,8 @@
     </div>
 </div>
 
+<script>
+    const loggedInUserId = {{user.id}};
+    // Use loggedInUserId in your JavaScript code
+</script>
 <script src="/js/accounts.js"></script>

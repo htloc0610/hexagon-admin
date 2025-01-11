@@ -53,6 +53,10 @@ const User = db.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    isBanned: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    }
   },
   {
     timestamps: true, // Kích hoạt timestamps

@@ -103,8 +103,6 @@ const orderController = {
             const revenueReport = await orderService.getRevenueReport(startDate, endDate, timeRange);
             const topRevenueProducts = await orderService.getTopRevenueProducts(startDate, endDate);
 
-            // console.log(revenueReport);
-            console.log(topRevenueProducts);
 
             res.render('index', { recentOrders, revenueReport, topRevenueProducts, timeRange });
         } catch (error) {

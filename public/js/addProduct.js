@@ -2,6 +2,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('addProductForm');
     const notification = document.getElementById('notification');
 
+    const toggleCategoryInputButton = document.getElementById('toggleCategoryInput');
+    const toggleCategoryDropdownButton = document.getElementById('toggleCategoryDropdown');
+    const categoryDropdownContainer = document.getElementById('categoryDropdownContainer');
+    const categoryInputContainer = document.getElementById('categoryInputContainer');
+    const categoryInput = document.getElementById('categoryInput');
+    const categoryDropdown = document.getElementById('category');
+
+    const toggleManufacturerInputButton = document.getElementById('toggleManufacturerInput');
+    const toggleManufacturerDropdownButton = document.getElementById('toggleManufacturerDropdown');
+    const manufacturerDropdownContainer = document.getElementById('manufacturerDropdownContainer');
+    const manufacturerInputContainer = document.getElementById('manufacturerInputContainer');
+    const manufacturerInput = document.getElementById('manufacturerInput');
+    const manufacturerDropdown = document.getElementById('manufacturer');
+
+    toggleCategoryInputButton.addEventListener('click', () => {
+        categoryDropdownContainer.style.display = 'none';
+        categoryInputContainer.style.display = 'block';
+        categoryDropdown.required = false;
+        categoryInput.required = true;
+    });
+
+    toggleCategoryDropdownButton.addEventListener('click', () => {
+        categoryInputContainer.style.display = 'none';
+        categoryDropdownContainer.style.display = 'block';
+        categoryInput.required = false;
+        categoryDropdown.required = true;
+    });
+
+    toggleManufacturerInputButton.addEventListener('click', () => {
+        manufacturerDropdownContainer.style.display = 'none';
+        manufacturerInputContainer.style.display = 'block';
+        manufacturerDropdown.required = false;
+        manufacturerInput.required = true;
+    });
+
+    toggleManufacturerDropdownButton.addEventListener('click', () => {
+        manufacturerInputContainer.style.display = 'none';
+        manufacturerDropdownContainer.style.display = 'block';
+        manufacturerInput.required = false;
+        manufacturerDropdown.required = true;
+    });
+
+    
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -11,6 +55,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const formData = new FormData(form);
+
+        // Choose category or categoryInput
+        if (categoryInput.value.trim()) {
+            formData.set('category', categoryInput.value.trim());
+        } else {
+            formData.set('category', categoryDropdown.value);
+        }
+
+        // Choose manufacturer or manufacturerInput
+        if (manufacturerInput.value.trim()) {
+            formData.set('manufacturer', manufacturerInput.value.trim());
+        } else {
+            formData.set('manufacturer', manufacturerDropdown.value);
+        }
+
+        console.log(formData);
+
         const thumbnailFile = formData.get('thumbnail');
         const imagesFiles = formData.getAll('images');
 
@@ -93,12 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = document.getElementById('category').value;
         const manufacturer = document.getElementById('manufacturer').value;
         const price = parseFloat(document.getElementById('price').value);
-        const rating = parseInt(document.getElementById('rating').value);
         const status = document.querySelector('input[name="status"]:checked');
         const stockQuantity = parseInt(document.getElementById('stock_quantity').value);
         const thumbnail = document.getElementById('thumbnail').files[0];
+        const categoryInput = document.getElementById('categoryInput').value.trim();
+        const manufacturerInput = document.getElementById('manufacturerInput').value.trim();
 
-        if (!productName || !description || !category || !manufacturer || !price || !status || !thumbnail) {
+        if (!productName || !description || (!category && !categoryInput) || (!manufacturer && !manufacturerInput) || !price || !status || !thumbnail) {
             showNotification('All fields are required!', 'alert-danger');
             return false;
         }

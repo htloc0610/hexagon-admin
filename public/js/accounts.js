@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     renderTable(accountsData);
                 }
-                updatePagination();
+                updatePagination(data.length);
                 // Update the URL to reflect the current page
                 history.pushState(null, '', `?page=${currentPage}`);
             })
@@ -80,27 +80,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td data-key="createdAt">${account.createdAt}</td>
                 <td data-key="role">${account.role}</td>
                 <td>
-                <a href="/account/${account.id}" class="btn btn-sm btn-primary">Details</a>
-                ${account.id !== loggedInUserId ? `
-                <button class="btn btn-sm ${account.isBanned ? 'btn-success' : 'btn-danger'} ban-unban-btn" data-id="${account.id}" data-banned="${account.isBanned}">
-                    ${account.isBanned ? 'Unban' : 'Ban'}
-                </button>` : ''}
-            </td>
+                    <a href="/account/${account.id}" class="btn btn-sm btn-primary">Details</a>
+                    ${account.id !== loggedInUserId ? `
+                    <button class="btn btn-sm ${account.isBanned ? 'btn-success' : 'btn-danger'} ban-unban-btn" data-id="${account.id}" data-banned="${account.isBanned}">
+                        ${account.isBanned ? 'Unban' : 'Ban'}
+                    </button>` : ''}
+                </td>
             `;
             accountsTable.appendChild(row);
         });
-    
+
         document.querySelectorAll('.ban-unban-btn').forEach(button => {
             button.addEventListener('click', async (event) => {
                 const userId = event.target.getAttribute('data-id');
                 const isBanned = event.target.getAttribute('data-banned') === 'true';
                 const url = isBanned ? `/unban/${userId}` : `/ban/${userId}`;
                 const method = 'POST';
-    
+
                 try {
                     const response = await fetch(url, { method });
                     const result = await response.json();
-    
+
                     if (response.ok) {
                         // Update button text and class
                         event.target.textContent = isBanned ? 'Ban' : 'Unban';
@@ -117,20 +117,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function updatePagination() {
+    function updatePagination(dataLength) {
         paginationContainer.innerHTML = `
-            <button class="btn btn-primary mr-2" ${currentPage === 1 ? 'disabled' : ''} id="prevPage">Previous</button>
-            <span class="mx-2">Page ${currentPage}</span>
-            <button class="btn btn-primary ml-2" id="nextPage">Next</button>
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <button class="btn btn-primary" ${currentPage === 1 ? 'disabled' : ''} id="prevPage">Previous</button>
+                <span class="mx-2 page-indicator-highlight">Page ${currentPage}</span>
+                <button class="btn btn-primary" id="nextPage">Next</button>
+            </div>
         `;
 
-        document.getElementById('prevPage').addEventListener('click', () => {
+        const prevPageButton = document.getElementById('prevPage');
+        const nextPageButton = document.getElementById('nextPage');
+
+        prevPageButton.style.visibility = currentPage === 1 ? 'hidden' : '';
+        nextPageButton.style.visibility = dataLength < 10 ? 'hidden' : '';
+
+        prevPageButton.addEventListener('click', () => {
             if (currentPage > 1) {
                 fetchAccounts(currentPage - 1);
             }
         });
 
-        document.getElementById('nextPage').addEventListener('click', () => {
+        nextPageButton.addEventListener('click', () => {
             fetchAccounts(currentPage + 1);
         });
     }

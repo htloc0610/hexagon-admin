@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
-            console.log(formObject);
 
             if (data.error) {
                 showNotification(data.error, 'alert-danger');
@@ -99,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const stockQuantity = parseInt(document.getElementById('stock_quantity').value);
         const thumbnail = document.getElementById('thumbnail').files[0];
 
-        if (!productName || !description || !category || !manufacturer || !price || !rating || !status || !thumbnail) {
+        if (!productName || !description || !category || !manufacturer || !price || !status || !thumbnail) {
             showNotification('All fields are required!', 'alert-danger');
             return false;
         }
@@ -109,10 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
-        if (rating < 1 || rating > 5 || !Number.isInteger(rating)) {
-            showNotification('Rating must be an integer between 1 and 5!', 'alert-danger');
-            return false;
-        }
 
         if (status.value === 'On stock' && (stockQuantity <= 0 || !Number.isInteger(stockQuantity))) {
             showNotification('Stock quantity must be greater than 0 when On stock is chosen!', 'alert-danger');

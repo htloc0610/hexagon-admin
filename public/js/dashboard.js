@@ -1,102 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const revenueTimeRangeSelect = document.getElementById('revenueTimeRange');
-    const topRevenueTimeRangeSelect = document.getElementById('topRevenueTimeRange');
+    // Preprocess data for Revenue Report Chart
+    const revenueLabels = [];
+    const revenueValues = [];
+    const timeRange = document.getElementById('revenueTimeRange').value;
+
+    revenueReport.forEach((item) => {
+        let label;
+        if (timeRange === 'week') {
+            label = new Date(item.date).toLocaleDateString();
+        } else if (timeRange === 'month') {
+            label = new Date(item.date).toLocaleDateString();
+        } else {
+            label = new Date(item.date).toLocaleDateString();
+        }
+        revenueLabels.push(label);
+        revenueValues.push(item.totalRevenue);
+    });
 
     const revenueChartCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueChartCtx, {
+        type: 'line',
+        data: {
+            labels: revenueLabels,
+            datasets: [{
+                label: 'Revenue',
+                data: revenueValues,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Preprocess data for Top Revenue Products Chart
+    const topRevenueLabels = topRevenueProducts.map(item => item.productName);
+    const topRevenueValues = topRevenueProducts.map(item => item.totalRevenue);
+
     const topRevenueChartCtx = document.getElementById('topRevenueChart').getContext('2d');
-
-    let revenueChart;
-    let topRevenueChart;
-
-    async function fetchRevenueReport(timeRange) {
-        const response = await fetch(`/api/revenue-report?timeRange=${timeRange}`);
-        const data = await response.json();
-        return data;
-    }
-
-    async function fetchTopRevenueProducts(timeRange) {
-        const response = await fetch(`/api/top-revenue-products?timeRange=${timeRange}`);
-        const data = await response.json();
-        return data;
-    }
-
-    async function updateRevenueChart(timeRange) {
-        const data = await fetchRevenueReport(timeRange);
-        const labels = data.map(item => item.date);
-        const values = data.map(item => item.totalRevenue);
-
-        if (revenueChart) {
-            revenueChart.destroy();
-        }
-
-        revenueChart = new Chart(revenueChartCtx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: values,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: timeRange
-                        }
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
+    new Chart(topRevenueChartCtx, {
+        type: 'bar',
+        data: {
+            labels: topRevenueLabels,
+            datasets: [{
+                label: 'Revenue',
+                data: topRevenueValues,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
-    }
-
-    async function updateTopRevenueChart(timeRange) {
-        const data = await fetchTopRevenueProducts(timeRange);
-        const labels = data.map(item => item.productName);
-        const values = data.map(item => item.totalRevenue);
-
-        if (topRevenueChart) {
-            topRevenueChart.destroy();
         }
-
-        topRevenueChart = new Chart(topRevenueChartCtx, {
-            type: 'bar',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: values,
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    revenueTimeRangeSelect.addEventListener('change', (event) => {
-        updateRevenueChart(event.target.value);
     });
-
-    topRevenueTimeRangeSelect.addEventListener('change', (event) => {
-        updateTopRevenueChart(event.target.value);
-    });
-
-    // Initial load
-    updateRevenueChart('day');
-    updateTopRevenueChart('day');
 });

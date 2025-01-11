@@ -169,16 +169,30 @@ const orderService = {
             throw new Error('Error retrieving recent orders: ' + error.message);
         }
     },
-    async getRevenueReport(startDate, endDate) {
+    async getRevenueReport(startDate, endDate, timeRange) {
         try {
+            let dateTruncUnit;
+            switch (timeRange) {
+                case 'day':
+                    dateTruncUnit = 'day';
+                    break;
+                case 'week':
+                    dateTruncUnit = 'week';
+                    break;
+                case 'month':
+                default:
+                    dateTruncUnit = 'month';
+                    break;
+            }
+    
             const revenueData = await Order.findAll({
                 where: {
-                    createdAt: {
+                    orderDate: {
                         [Op.between]: [startDate, endDate],
                     },
                 },
                 attributes: [
-                    [sequelize.fn('DATE', sequelize.col('createdAt')), 'date'],
+                    [sequelize.fn('date_trunc', dateTruncUnit, sequelize.col('orderDate')), 'date'],
                     [sequelize.fn('SUM', sequelize.col('totalCost')), 'totalRevenue'],
                 ],
                 group: ['date'],

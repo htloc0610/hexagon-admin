@@ -80,22 +80,38 @@ const orderController = {
     },
     async getDashboard(req, res) {
         try {
-            const startDate = moment().startOf('month').toDate();
-            const endDate = moment().endOf('month').toDate();
+            const timeRange = req.query.timeRange || 'month';
+            let startDate, endDate;
+
+            switch (timeRange) {
+                case 'day':
+                    startDate = moment().subtract(7, 'days').startOf('day').toDate();
+                    endDate = moment().endOf('day').toDate();
+                    break;
+                case 'week':
+                    startDate = moment().subtract(7, 'weeks').startOf('week').toDate();
+                    endDate = moment().endOf('week').toDate();
+                    break;
+                case 'month':
+                default:
+                    startDate = moment().subtract(7, 'months').startOf('month').toDate();
+                    endDate = moment().endOf('month').toDate();
+                    break;
+            }
 
             const recentOrders = await orderService.getRecentOrders(5);
-            const revenueReport = await orderService.getRevenueReport(startDate, endDate);
+            const revenueReport = await orderService.getRevenueReport(startDate, endDate, timeRange);
             const topRevenueProducts = await orderService.getTopRevenueProducts(startDate, endDate);
 
-            console.log(recentOrders);
             console.log(revenueReport);
-            console.log(topRevenueProducts);
+            // console.log(topRevenueProducts);
 
-            res.render('index', { recentOrders, revenueReport, topRevenueProducts });
+            res.render('index', { recentOrders, revenueReport, topRevenueProducts, timeRange });
         } catch (error) {
             res.status(500).send('Error retrieving dashboard data: ' + error.message);
         }
     },
+
 };
 
 module.exports = orderController;

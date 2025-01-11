@@ -232,9 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.style.width = '20px'; // Fixed width
             deleteBtn.style.height = '20px'; // Fixed height
             deleteBtn.style.fontSize = '12px'; // Fixed font size
+            deleteBtn.style.padding = '0';
             deleteBtn.textContent = 'X';
             deleteBtn.dataset.index = index;
-            deleteBtn.style.display = 'none'; // Initially hidden
     
             deleteBtn.addEventListener('click', function() {
                 urls.splice(deleteBtn.dataset.index, 1);
@@ -272,8 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     deleteBtn.style.width = '20px'; // Fixed width
                     deleteBtn.style.height = '20px'; // Fixed height
                     deleteBtn.style.fontSize = '12px'; // Fixed font size
+                    deleteBtn.style.padding = '0';
                     deleteBtn.textContent = 'X';
-                    deleteBtn.style.display = isEditMode ? 'block' : 'none'; // Show only in edit mode
+    
+                    deleteBtn.addEventListener('click', function() {
+                        imgContainer.remove();
+                    });
     
                     imgContainer.appendChild(img);
                     imgContainer.appendChild(deleteBtn);

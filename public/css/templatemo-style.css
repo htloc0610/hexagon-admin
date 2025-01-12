@@ -974,6 +974,14 @@ select.form-control {
 }
 
 
+.form-control::placeholder {
+  color: #ffffff;
+  /* Change this color to your desired placeholder color */
+  opacity: 0.5;
+  /* Ensure the color is not transparent */
+}
+
+
 
 .avatar-fill {
   width: 100%;

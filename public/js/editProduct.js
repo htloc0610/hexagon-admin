@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
     
+        if (!validateForm()) {
+            return;
+        }
     
         const formData = new FormData(form);
         const productId = formData.get('productId'); // Retrieve the product ID from the hidden input
@@ -182,6 +185,36 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification(`Error: ${error.message}`, 'alert-danger');
         }
     });
+
+    function validateForm() {
+        const productName = document.getElementById('productName').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const category = document.getElementById('category').value;
+        const manufacturer = document.getElementById('manufacturer').value;
+        const price = parseFloat(document.getElementById('price').value);
+        const status = document.querySelector('input[name="status"]:checked');
+        const stockQuantity = parseInt(document.getElementById('stock_quantity').value);
+        const thumbnail = document.getElementById('thumbnail').files[0];
+        const categoryInput = document.getElementById('categoryInput').value.trim();
+        const manufacturerInput = document.getElementById('manufacturerInput').value.trim();
+
+        if (!productName || !description || (!category && !categoryInput) || (!manufacturer && !manufacturerInput) || !price || !status) {
+            showNotification('All fields are required!', 'alert-danger');
+            return false;
+        }
+
+        if (price <= 0) {
+            showNotification('Price must be greater than 0!', 'alert-danger');
+            return false;
+        }
+
+        if (status.value === 'On stock' && (stockQuantity <= 0 || !Number.isInteger(stockQuantity))) {
+            showNotification('Stock quantity must be greater than 0 when On stock is chosen!', 'alert-danger');
+            return false;
+        }
+
+        return true;
+    }
 
     function showNotification(message, alertClass) {
         const notification = document.getElementById('notification');

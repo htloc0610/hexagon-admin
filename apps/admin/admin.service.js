@@ -237,7 +237,7 @@ const adminService = {
                 throw new Error('User not found');
             }
 
-            console.log(user); 
+            // console.log(user); 
 
             user.isBanned = true;
             await user.save();

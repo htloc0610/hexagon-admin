@@ -80,8 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td data-key="createdAt">${account.createdAt}</td>
                 <td data-key="role">${account.role}</td>
                 <td>
-                    <a href="/account/${account.id}" class="btn btn-sm btn-primary">Details</a>
-                    ${account.id !== loggedInUserId ? `
+                    <a href="/account/${account.id}?role=${account.role}" class="btn btn-sm btn-primary">Details</a>                    ${account.id !== loggedInUserId ? `
                     <button class="btn btn-sm ${account.isBanned ? 'btn-success' : 'btn-danger'} ban-unban-btn" data-id="${account.id}" data-banned="${account.isBanned}">
                         ${account.isBanned ? 'Unban' : 'Ban'}
                     </button>` : ''}

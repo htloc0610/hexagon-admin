@@ -81,7 +81,9 @@ router.get("/api/accounts", ensureAuthenticated, async (req, res) => {
 
 router.get("/account/:id", ensureAuthenticated, async (req, res) => {
   try {
-    const account = await adminController.getAccountById(req.params.id);
+    const accountId = req.params.id;
+    const accountRole = req.query.role;
+    const account = await adminController.getAccountByIdAndRole(accountId, accountRole);
     res.render("accountDetails", { account });
   } catch (error) {
     res.status(500).json({ message: error.message });

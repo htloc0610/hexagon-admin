@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // When sending the data, convert productData.urls to a JSON string
         try {
-            console.log('Submitting form data:', productData);
+            // console.log('Submitting form data:', productData);
             const response = await fetch(`/api/edit-product`, {
                 method: 'POST',
                 body: JSON.stringify(productData),

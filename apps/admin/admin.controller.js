@@ -32,7 +32,7 @@ const adminController = {
     },
 
     async getAccountById(id) {
-        console.log('id', id);
+        // console.log('id', id);
         try {
             const admin = await adminService.getAdminById(id);
             if (admin) {
@@ -50,6 +50,26 @@ const adminController = {
             throw new Error('Account not found');
         }
     },
+
+    async getAccountByIdAndRole(id, role) {
+        try {
+            if (role === 'Admin') {
+                const admin = await adminService.getAdminById(id);
+                if (admin) {
+                    return { ...admin.dataValues, role: 'Admin' };
+                }
+            } else if (role === 'User') {
+                const user = await userService.getUserById(id);
+                if (user) {
+                    return { ...user.dataValues, role: 'User' };
+                }
+            }
+            throw new Error('Account not found');
+        } catch (error) {
+            throw new Error('Account not found');
+        }
+    },
+
 
     async getPaginatedAccounts(offset, limit) {
         try {

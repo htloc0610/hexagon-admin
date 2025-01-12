@@ -149,7 +149,7 @@ const adminService = {
 
     // Xác thực mật khẩu người dùng
     async validatePassword(inputPassword, storedPassword) {
-        try {
+        try { 
             const isMatch = await bcrypt.compare(inputPassword, storedPassword);
             return isMatch;
         } catch (error) {
@@ -202,7 +202,6 @@ const adminService = {
 
     async resetPassword(token, newPassword) {
         try {
-        console.log(token);
         const user = await Admin.findOne({
             where: {
             resetPasswordToken: token,
@@ -237,7 +236,6 @@ const adminService = {
                 throw new Error('User not found');
             }
 
-            console.log(user); 
 
             user.isBanned = true;
             await user.save();

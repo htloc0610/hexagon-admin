@@ -32,7 +32,6 @@ const adminController = {
     },
 
     async getAccountById(id) {
-        console.log('id', id);
         try {
             const admin = await adminService.getAdminById(id);
             if (admin) {
@@ -215,7 +214,7 @@ const adminController = {
             const { oldPassword, newPassword } = req.body;
 
             // Fetch the current user data
-            const currentUser = await adminService.getUserById(userId);
+            const currentUser = await adminService.getAdminById(userId);
 
             // Check if the old password matches the current password
             
@@ -233,7 +232,7 @@ const adminController = {
             
 
             // Update the user information
-            const updatedUser = await adminService.updateUser(userId, updateData);
+            const updatedUser = await adminService.updateAdmin(userId, updateData);
 
             // Re-authenticate the user to update the session
             req.logIn(updatedUser, function(err) {

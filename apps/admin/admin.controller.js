@@ -261,6 +261,28 @@ const adminController = {
             return res.status(500).json({ errorMessage: 'Server error' });
         }
     },
+    async banUser(req, res) {
+        try {
+            const userId = req.params.id;
+            await adminService.banUser(userId);
+            res.json({ message: "User banned successfully" });
+        } catch (error) {
+            console.error('Error banning user:', error);
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    async unbanUser(req, res) {
+        try {
+            const userId = req.params.id;
+            await adminService.unbanUser(userId);
+            res.json({ message: "User unbanned successfully" });
+        } catch (error) {
+            console.error('Error unbanning user:', error);
+            res.status(500).json({ message: error.message });
+        }
+    },
+
 }
 
 module.exports = adminController;

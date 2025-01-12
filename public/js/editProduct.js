@@ -52,8 +52,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const formData = new FormData(form);
         const productId = formData.get('productId'); // Retrieve the product ID from the hidden input
-        const productData = Object.fromEntries(formData.entries());
+
+        // Choose category or categoryInput
+        if (categoryInput.value.trim()) {
+            formData.set('category', categoryInput.value.trim());
+        } else {
+            formData.set('category', categoryDropdown.value);
+        }
+
+        // Choose manufacturer or manufacturerInput
+        if (manufacturerInput.value.trim()) {
+            formData.set('manufacturer', manufacturerInput.value.trim());
+        } else {
+            formData.set('manufacturer', manufacturerDropdown.value);
+        }
+
+        console.log(formData);
     
+        const productData = Object.fromEntries(formData.entries());
     
         const thumbnailFile = formData.get('thumbnail');
         const thumbnailPreviewText = document.getElementById('thumbnailPreviewText');
@@ -232,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.style.width = '20px'; // Fixed width
             deleteBtn.style.height = '20px'; // Fixed height
             deleteBtn.style.fontSize = '12px'; // Fixed font size
+            deleteBtn.style.padding = '0';
             deleteBtn.textContent = 'X';
             deleteBtn.dataset.index = index;
-            deleteBtn.style.display = 'none'; // Initially hidden
     
             deleteBtn.addEventListener('click', function() {
                 urls.splice(deleteBtn.dataset.index, 1);
@@ -272,8 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     deleteBtn.style.width = '20px'; // Fixed width
                     deleteBtn.style.height = '20px'; // Fixed height
                     deleteBtn.style.fontSize = '12px'; // Fixed font size
+                    deleteBtn.style.padding = '0';
                     deleteBtn.textContent = 'X';
-                    deleteBtn.style.display = isEditMode ? 'block' : 'none'; // Show only in edit mode
+    
+                    deleteBtn.addEventListener('click', function() {
+                        imgContainer.remove();
+                    });
     
                     imgContainer.appendChild(img);
                     imgContainer.appendChild(deleteBtn);

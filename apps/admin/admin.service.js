@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const Admin = require("./admin.model");
 const { Op } = require("sequelize");
+const User = require("../users/user.model");
 
 const adminService = {
 
@@ -227,6 +228,41 @@ const adminService = {
         } catch (error) {
         console.error("Error resetting password:", error);
         return { message: "Internal server error" };
+        }
+    },
+    async banUser(userId) {
+        try {
+            const user = await User.findByPk(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            console.log(user); 
+
+            user.isBanned = true;
+            await user.save();
+
+            return { message: 'User banned successfully' };
+        } catch (error) {
+            console.error('Error banning user:', error);
+            throw new Error('Error banning user');
+        }
+    },
+
+    async unbanUser(userId) {
+        try {
+            const user = await User.findByPk(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            user.isBanned = false;
+            await user.save();
+
+            return { message: 'User unbanned successfully' };
+        } catch (error) {
+            console.error('Error unbanning user:', error);
+            throw new Error('Error unbanning user');
         }
     },
 };

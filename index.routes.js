@@ -56,7 +56,7 @@ router.get("/accounts", async (req, res) => {
     const limit = 10;
     const offset = (page - 1) * limit;
     const accounts = await adminController.getPaginatedAccounts(offset, limit);
-    res.render("accounts", { accounts, page });
+    res.render("accounts", { accounts, page, user: req.user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -83,6 +83,11 @@ router.get("/account/:id", ensureAuthenticated, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// Ban routes -----------------------------------------------------
+router.post("/ban/:id", ensureAuthenticated, adminController.banUser);
+router.post("/unban/:id", ensureAuthenticated, adminController.unbanUser);
+
 
 // Products routes -----------------------------------------------------
 router.get("/products", async (req, res) => {

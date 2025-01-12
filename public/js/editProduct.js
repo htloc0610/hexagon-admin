@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.set('manufacturer', manufacturerDropdown.value);
         }
 
-        console.log(formData);
     
         const productData = Object.fromEntries(formData.entries());
     
@@ -156,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // When sending the data, convert productData.urls to a JSON string
         try {
-            console.log('Submitting form data:', productData);
             const response = await fetch(`/api/edit-product`, {
                 method: 'POST',
                 body: JSON.stringify(productData),

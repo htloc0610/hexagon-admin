@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         accountsTable.innerHTML = '';
         data.forEach(account => {
             const row = document.createElement('tr');
+            
             row.innerHTML = `
                 <th scope="row" data-key="id">${account.id}</th>
                 <td data-key="username">${account.username}</td>
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td data-key="role">${account.role}</td>
                 <td>
                     <a href="/account/${account.id}" class="btn btn-sm btn-primary">Details</a>
-                    ${account.id !== loggedInUserId ? `
+                    ${account.id !== loggedInUserId || (account.id === loggedInUserId && account.role !== 'Admin') ? `
                     <button class="btn btn-sm ${account.isBanned ? 'btn-success' : 'btn-danger'} ban-unban-btn" data-id="${account.id}" data-banned="${account.isBanned}">
                         ${account.isBanned ? 'Unban' : 'Ban'}
                     </button>` : ''}

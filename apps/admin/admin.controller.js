@@ -32,7 +32,6 @@ const adminController = {
     },
 
     async getAccountById(id) {
-        console.log('id', id);
         try {
             const admin = await adminService.getAdminById(id);
             if (admin) {

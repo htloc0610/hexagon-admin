@@ -10,7 +10,6 @@ const productController = require("./apps/products/product.controller");
 const orderController = require("./apps/orders/order.controller");
 
 
-router.get("/", orderController.getDashboard);
 
 
 // Login, register routes -----------------------------------------------------
@@ -23,6 +22,10 @@ router.get("/logout", adminController.logoutAdmin);
 router.put("/password", ensureAuthenticated, adminController.changePassword);
 
 router.use(ensureAuthenticated);
+
+// Home page route -----------------------------------------------------
+router.get("/", orderController.getDashboard);
+
 
 // Profile routes -----------------------------------------------------
 router.get("/profile", ensureAuthenticated, (req, res) => {

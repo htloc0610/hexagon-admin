@@ -48,11 +48,6 @@ const User = db.define(
     resetPasswordExpires: {
       type: DataTypes.DATE,
     },
-
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
     isBanned: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

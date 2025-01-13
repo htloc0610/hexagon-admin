@@ -9,8 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSortKey = ''; // Track the current sort key
     let accountsData = []; // Store the fetched accounts data
 
-    filterNameInput.addEventListener('input', () => fetchAccounts(currentPage));
-    filterEmailInput.addEventListener('input', () => fetchAccounts(currentPage));
+    // filterNameInput.addEventListener('input', () => fetchAccounts(currentPage));
+    // filterEmailInput.addEventListener('input', () => fetchAccounts(currentPage));
+
+    const applyFilterButton = document.getElementById('applyFilter');
+    applyFilterButton.addEventListener('click', () => {
+        currentPage = 1;
+        fetchAccounts(currentPage);
+    });
 
     sortButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -22,34 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    function sortTable(sortKey) {
-        const sortedRows = accountsData.sort((a, b) => {
-            const aValue = a[sortKey];
-            const bValue = b[sortKey];
 
-            if (sortKey === 'id') {
-                return sortOrder === 'asc' ? parseInt(aValue) - parseInt(bValue) : parseInt(bValue) - parseInt(aValue);
-            } else if (sortKey === 'createdAt') {
-                return sortOrder === 'asc' ? moment(aValue, 'DD/MM/YYYY, h:mm:ss a').toDate() - moment(bValue, 'DD/MM/YYYY, h:mm:ss a').toDate() : moment(bValue, 'DD/MM/YYYY, h:mm:ss a').toDate() - moment(aValue, 'DD/MM/YYYY, h:mm:ss a').toDate();
-            } else {
-                return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-            }
-        });
 
-        renderTable(sortedRows);
-    }
-
-    function filterTable() {
-        const filterName = filterNameInput.value.toLowerCase();
-        const filterEmail = filterEmailInput.value.toLowerCase();
-        const filteredRows = accountsData.filter(account => {
-            const name = account.username.toLowerCase();
-            const email = account.email.toLowerCase();
-            return name.includes(filterName) && email.includes(filterEmail);
-        });
-
-        renderTable(filteredRows);
-    }
 
     function fetchAccounts(page) {
         const filterName = filterNameInput.value;

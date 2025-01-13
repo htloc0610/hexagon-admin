@@ -216,14 +216,14 @@ const adminController = {
                 return next(err);
             }
             if (!user) {
-                return res.status(401).json({ message: info.message });
+                return res.status(401).json({ error: info.message });
             }
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
                 }
-                // Đăng nhập thành công, chuyển hướng tới trang /
-                return res.redirect('/');
+                // Successful login, return a JSON response
+                return res.json({ success: true });
             });
         })(req, res, next);
     },

@@ -43,6 +43,24 @@ const productController = {
             throw new Error('Error retrieving paginated products: ' + error.message);
         }
     },
+
+    async getFilteredAndSortedProducts({ offset, limit, filterName, filterCategory, filterManufacturer, sortKey, sortOrder }) {
+        try {
+          const products = await productService.getFilteredAndSortedProducts({
+            offset,
+            limit,
+            filterName,
+            filterCategory,
+            filterManufacturer,
+            sortKey,
+            sortOrder,
+          });
+          return products;
+        } catch (error) {
+          throw new Error('Error retrieving filtered and sorted products: ' + error.message);
+        }
+    },
+      
     // Tạo sản phẩm mới
     async createProduct(req, res) {
         try {

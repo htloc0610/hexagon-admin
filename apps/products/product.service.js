@@ -109,6 +109,55 @@ const productService = {
             throw new Error('Error retrieving paginated products: ' + error.message);
         }
     },
+
+    async getFilteredAndSortedProducts({ offset, limit, filterName, filterCategory, filterManufacturer, sortKey, sortOrder }) {
+        try {
+          const whereConditions = {};
+          if (filterName) {
+            whereConditions.productName = { [Op.iLike]: `%${filterName}%` };
+          }
+          if (filterCategory) {
+            whereConditions.category = { [Op.iLike]: `%${filterCategory}%` };
+          }
+          if (filterManufacturer) {
+            whereConditions.manufacturer = { [Op.iLike]: `%${filterManufacturer}%` };
+          }
+      
+          const order = [];
+          if (sortKey) {
+            order.push([sortKey, sortOrder === 'desc' ? 'DESC' : 'ASC']);
+          }
+      
+          const products = await Product.findAll({
+            where: whereConditions,
+            include: [
+              {
+                model: OrderItem,
+                as: 'order_items',
+              },
+            ],
+          });
+      
+          const data = products.map(product => {
+            product.dataValues.totalPurchase = product.dataValues.order_items.reduce((total, item) => total + item.quantity, 0);
+            return product;
+          });
+
+          data.sort((a, b) => {
+            if (sortKey === 'totalPurchase') {
+              return sortOrder === 'desc' ? b.dataValues.totalPurchase - a.dataValues.totalPurchase : a.dataValues.totalPurchase - b.dataValues.totalPurchase;
+            }
+            return 0;
+          });
+
+          const paginatedData = data.slice(offset, offset + limit);
+      
+          return paginatedData.map(product => product.dataValues);
+        } catch (error) {
+          throw new Error('Error retrieving filtered and sorted products: ' + error.message);
+        }
+    },
+      
     // Tạo sản phẩm mới
     async createProduct(productData) {
         try {

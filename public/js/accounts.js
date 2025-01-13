@@ -9,18 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSortKey = ''; // Track the current sort key
     let accountsData = []; // Store the fetched accounts data
 
+    filterNameInput.addEventListener('input', () => fetchAccounts(currentPage));
+    filterEmailInput.addEventListener('input', () => fetchAccounts(currentPage));
+
     sortButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const sortKey = button.getAttribute('data-sort');
-            currentSortKey = sortKey;
-            // Toggle sort order
+            currentSortKey = button.getAttribute('data-sort');
             sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            sortTable(sortKey);
+            fetchAccounts(currentPage);
         });
     });
 
-    filterNameInput.addEventListener('input', filterTable);
-    filterEmailInput.addEventListener('input', filterTable);
+
 
     function sortTable(sortKey) {
         const sortedRows = accountsData.sort((a, b) => {
@@ -52,22 +52,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchAccounts(page) {
-        fetch(`/api/accounts?page=${page}`)
+        const filterName = filterNameInput.value;
+        const filterEmail = filterEmailInput.value;
+        const params = new URLSearchParams({
+            page,
+            filterName,
+            filterEmail,
+            sortKey: currentSortKey,
+            sortOrder
+        });
+    
+        fetch(`/api/accounts?${params.toString()}`)
             .then(response => response.json())
             .then(data => {
-                accountsData = data; // Store the fetched data
+                accountsData = data;
                 currentPage = page;
-                if (currentSortKey) {
-                    sortTable(currentSortKey); // Apply sorting if a sort key is set
-                } else {
-                    renderTable(accountsData);
-                }
+                renderTable(accountsData);
                 updatePagination(data.length);
-                // Update the URL to reflect the current page
-                history.pushState(null, '', `?page=${currentPage}`);
+                history.pushState(null, '', `?page=${currentPage}&${params.toString()}`);
             })
             .catch(error => console.error('Error fetching accounts:', error));
     }
+    
 
     function renderTable(data) {
         accountsTable.innerHTML = '';
@@ -81,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td data-key="createdAt">${account.createdAt}</td>
                 <td data-key="role">${account.role}</td>
                 <td>
-                    <a href="/account/${account.id}" class="btn btn-sm btn-primary">Details</a>
-                    ${account.id !== loggedInUserId || (account.id === loggedInUserId && account.role !== 'Admin') ? `
+                    <a href="/account/${account.id}?role=${account.role}" class="btn btn-sm btn-primary">Details</a>
+                    ${account.role === 'User' ? `
                     <button class="btn btn-sm ${account.isBanned ? 'btn-success' : 'btn-danger'} ban-unban-btn" data-id="${account.id}" data-banned="${account.isBanned}">
                         ${account.isBanned ? 'Unban' : 'Ban'}
                     </button>` : ''}

@@ -54,32 +54,50 @@ router.post(
 // Account routes-----------------------------------------------------
 router.get("/accounts", async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
-    const offset = (page - 1) * limit;
-    const accounts = await adminController.getPaginatedAccounts(offset, limit);
-    res.render("accounts", { accounts, page, user: req.user });
+    
+      const page = parseInt(req.query.page) || 1; // Giá trị mặc định là 1
+      const limit = 10;
+      const offset = (page - 1) * limit;
+      const filterName = req.query.filterName || ""; // Mặc định là chuỗi rỗng
+      const filterEmail = req.query.filterEmail || "";
+      const sortKey = req.query.sortKey || "id"; // Mặc định sắp xếp theo 'id'
+      const sortOrder = req.query.sortOrder || "asc"; // Mặc định sắp xếp tăng dần
+
+      const accounts = await adminController.getPaginatedAccounts(
+          offset,
+          limit,
+          filterName,
+          filterEmail,
+          sortKey,
+          sortOrder
+      );
+      res.render("accounts", { accounts, page, user: req.user });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 });
 
 // API route to fetch paginated accounts
 router.get("/api/accounts", ensureAuthenticated, async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
-    const offset = (page - 1) * limit;
-    const accounts = await adminController.getPaginatedAccounts(offset, limit);
-    res.json(accounts);
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10;
+      const offset = (page - 1) * limit;
+      const { filterName, filterEmail, sortKey, sortOrder } = req.query;
+
+      const accounts = await adminController.getPaginatedAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder);
+      res.json(accounts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 });
 
+
 router.get("/account/:id", ensureAuthenticated, async (req, res) => {
   try {
-    const account = await adminController.getAccountById(req.params.id);
+    const accountId = req.params.id;
+    const accountRole = req.query.role;
+    const account = await adminController.getAccountByIdAndRole(accountId, accountRole);
     res.render("accountDetails", { account });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -113,15 +131,25 @@ router.get("/api/products", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const offset = (page - 1) * limit;
-    const products = await productController.getPaginatedProducts(
+
+    const { filterName, filterCategory, filterManufacturer, sortKey, sortOrder } = req.query;
+
+    const products = await productController.getFilteredAndSortedProducts({
       offset,
-      limit
-    );
+      limit,
+      filterName,
+      filterCategory,
+      filterManufacturer,
+      sortKey,
+      sortOrder,
+    });
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 router.post("/api/add", productController.createProduct);
 

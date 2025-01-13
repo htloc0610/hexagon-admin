@@ -116,6 +116,12 @@ const adminController = {
             // Lấy dữ liệu từ request body
             const { username, email, password, firstName, lastName, url } = req.body;
 
+            // Check if the URL is the default value
+            let profileUrl = url;
+            if (url === 'defaultValue') {
+                profileUrl = 'https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png'; // Leave blank so you can paste the link
+            }
+
             // Kiểm tra xem tên người dùng hoặc email đã tồn tại chưa
             if (await adminService.checkIfUsernameExists(username)) {
                 return res.status(400).json({ message: 'Username already exists' });
@@ -125,7 +131,7 @@ const adminController = {
             }
 
             // Tạo người dùng mới
-            const newUser = await adminService.createAdmin({ username, email, password, firstName, lastName, url });
+            const newUser = await adminService.createAdmin({ username, email, password, firstName, lastName, profileUrl });
 
             // Trả về kết quả
             return res.status(201).json({

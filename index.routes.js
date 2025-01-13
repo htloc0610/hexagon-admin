@@ -24,6 +24,9 @@ router.use(ensureAuthenticated);
 
 
 router.get("/", orderController.getDashboard);
+router.get("/create-admin", (req, res) => {
+  res.render("create-admin", { layout: "main", currentRoute: "/create-admin" });
+});
 
 // Profile routes -----------------------------------------------------
 router.get("/profile", ensureAuthenticated, (req, res) => {

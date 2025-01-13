@@ -178,8 +178,8 @@ passwordForm.addEventListener('submit', async function (e) {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                showError(data.error);
+            if (data.error || data.message === 'Incorrect password') {
+                showError(data.message);
             } else {
                 showSuccess('Password updated successfully.');
                 passwordForm.style.display = 'none';

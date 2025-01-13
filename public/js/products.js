@@ -17,14 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const sortKey = button.getAttribute('data-sort');
             currentSortKey = sortKey;
             // Toggle sort order
-            sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
             sortTable(sortKey);
         });
     });
 
-    filterNameInput.addEventListener('input', filterTable);
-    filterCategoryInput.addEventListener('input', filterTable);
-    filterManufacturerInput.addEventListener('input', filterTable);
+
+    const applyFilterButton = document.getElementById('applyFilter');
+    applyFilterButton.addEventListener('click', () => {
+        currentPage = 1;
+        filterTable();
+    });
 
     prevPageButton.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -37,53 +39,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function sortTable(sortKey) {
-        const sortedRows = productsData.sort((a, b) => {
-            const aValue = a[sortKey];
-            const bValue = b[sortKey];
-
-            if (sortKey === 'id' || sortKey === 'totalPurchase') {
-                return sortOrder === 'asc' ? parseInt(aValue) - parseInt(bValue) : parseInt(bValue) - parseInt(aValue);
-            } else if (sortKey === 'price') {
-                return sortOrder === 'asc' ? parseFloat(aValue) - parseFloat(bValue) : parseFloat(bValue) - parseFloat(aValue);
-            } else if (sortKey === 'createdAt') {
-                return sortOrder === 'asc' ? new Date(aValue) - new Date(bValue) : new Date(bValue) - new Date(aValue);
-            } else {
-                return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-            }
-        });
-
-        renderTable(sortedRows);
+        currentSortKey = sortKey;
+        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        fetchProducts(currentPage);
     }
 
     function filterTable() {
-        const filterName = filterNameInput.value.toLowerCase();
-        const filterCategory = filterCategoryInput.value.toLowerCase();
-        const filterManufacturer = filterManufacturerInput.value.toLowerCase();
-        const filteredRows = productsData.filter(product => {
-            const name = product.productName.toLowerCase();
-            const category = product.category.toLowerCase();
-            const manufacturer = product.manufacturer.toLowerCase();
-            return name.includes(filterName) && category.includes(filterCategory) && manufacturer.includes(filterManufacturer);
-        });
-
-        renderTable(filteredRows);
+        fetchProducts(currentPage);
     }
 
     function fetchProducts(page) {
-        fetch(`/api/products?page=${page}`)
-            .then(response => response.json())
-            .then(data => {
-                productsData = data; // Store the fetched data
-                currentPage = page;
-                if (currentSortKey) {
-                    sortTable(currentSortKey); // Apply sorting if a sort key is set
-                } else {
-                    renderTable(productsData);
-                }
-                updatePagination(data.length);
-            })
-            .catch(error => console.error('Error fetching products:', error));
+        const filterName = filterNameInput.value;
+        const filterCategory = filterCategoryInput.value;
+        const filterManufacturer = filterManufacturerInput.value;
+        
+        const url = new URL(`/api/products`, window.location.origin);
+        url.searchParams.append('page', page);
+        url.searchParams.append('filterName', filterName);
+        url.searchParams.append('filterCategory', filterCategory);
+        url.searchParams.append('filterManufacturer', filterManufacturer);
+        if (currentSortKey) {
+          url.searchParams.append('sortKey', currentSortKey);
+          url.searchParams.append('sortOrder', sortOrder);
+        }
+      
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            productsData = data;
+            currentPage = page;
+            renderTable(productsData);
+            updatePagination(data.length);
+          })
+          .catch(error => console.error('Error fetching products:', error));
     }
+      
 
     function renderTable(data) {
         productsTable.innerHTML = '';

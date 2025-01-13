@@ -133,15 +133,25 @@ router.get("/api/products", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const offset = (page - 1) * limit;
-    const products = await productController.getPaginatedProducts(
+
+    const { filterName, filterCategory, filterManufacturer, sortKey, sortOrder } = req.query;
+
+    const products = await productController.getFilteredAndSortedProducts({
       offset,
-      limit
-    );
+      limit,
+      filterName,
+      filterCategory,
+      filterManufacturer,
+      sortKey,
+      sortOrder,
+    });
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 router.post("/api/add", productController.createProduct);
 

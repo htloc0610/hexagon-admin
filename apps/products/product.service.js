@@ -161,7 +161,7 @@ const productService = {
 
           const paginatedData = data.slice(offset, offset + limit);
 
-      
+    
           return paginatedData.map(product => product.dataValues);
         } catch (error) {
           throw new Error('Error retrieving filtered and sorted products: ' + error.message);

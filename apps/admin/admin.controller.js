@@ -71,19 +71,25 @@ const adminController = {
     },
 
 
-    async getPaginatedAccounts(offset, limit) {
+    async getPaginatedAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder) {
         try {
-            const admins = await adminService.getPaginatedAdmins(offset, limit);
-            const users = await userService.getPaginatedUsers(offset, limit); // Assuming you have a method to get paginated users
-            const adminData = admins.map(admin => ({ ...admin.dataValues, role: 'Admin', createdAt: moment(admin.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for admins and add role
-            const userData = users.map(user => ({ ...user.dataValues, role: 'User', createdAt: moment(user.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a') })); // Extract dataValues for users and add role
-            const accounts = [...adminData, ...userData].slice(0, limit); // Combine admin and user data and limit to 10
-            return accounts; // Return the combined data
+            console.log('Fetching accounts with parameters:', { offset, limit, filterName, filterEmail, sortKey, sortOrder });
+    
+            const accounts = await adminService.fetchAccounts(
+                offset,
+                limit,
+                filterName,
+                filterEmail,
+                sortKey,
+                sortOrder
+            );
+    
+            return accounts;
         } catch (error) {
-            throw new Error(error.message); // Throw the error to be caught in the route handler
+            console.error('Error fetching accounts:', error.message);
+            throw new Error(error.message); // Quăng lỗi để router xử lý
         }
     },
-
     
 
     async getAdminById(req, res) {

@@ -73,7 +73,7 @@ const adminController = {
 
     async getPaginatedAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder) {
         try {
-            console.log('Fetching accounts with parameters:', { offset, limit, filterName, filterEmail, sortKey, sortOrder });
+            // console.log('Fetching accounts with parameters:', { offset, limit, filterName, filterEmail, sortKey, sortOrder });
     
             const accounts = await adminService.fetchAccounts(
                 offset,

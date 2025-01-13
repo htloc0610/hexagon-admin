@@ -33,12 +33,12 @@ const adminService = {
 
     async fetchAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder) {
         try {
-            console.log('fetchAccounts');
+            // console.log('fetchAccounts');
             const whereClause = {};
             if (filterName) whereClause.username = { [Op.like]: `%${filterName}%` };
             if (filterEmail) whereClause.email = { [Op.like]: `%${filterEmail}%` };
     
-            const orderClause = sortKey ? [[sortKey, sortOrder || 'asc']] : [];
+            const orderClause = sortKey && sortKey !== 'role' ? [[sortKey, sortOrder || 'asc']] : [];
     
             const admins = await Admin.findAll({ offset, limit, where: whereClause, order: orderClause });
             const users = await User.findAll({ offset, limit, where: whereClause, order: orderClause });
@@ -55,7 +55,22 @@ const adminService = {
                 createdAt: moment(user.dataValues.createdAt).format('DD/MM/YYYY, h:mm:ss a'),
             }));
     
-            return [...adminData, ...userData].slice(0, limit);
+            const combinedData = [...adminData, ...userData];
+    
+            if (sortKey === 'role') {
+                combinedData.sort((a, b) => {
+                    if (sortOrder === 'desc') {
+                        return b.role.localeCompare(a.role);
+                    }
+                    return a.role.localeCompare(b.role);
+                });
+            } else if (sortKey === 'createdAt') {
+                combinedData.sort((a, b) => { 
+                    return sortOrder === 'desc' ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt);
+                });
+            }
+    
+            return combinedData.slice(0, limit);
         } catch (error) {
             throw new Error(error.message);
         }

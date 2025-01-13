@@ -39,9 +39,10 @@ const adminService = {
             if (filterEmail) whereClause.email = { [Op.like]: `%${filterEmail}%` };
     
             const orderClause = sortKey && sortKey !== 'role' ? [[sortKey, sortOrder || 'asc']] : [];
+
     
-            const admins = await Admin.findAll({ offset, limit, where: whereClause, order: orderClause });
-            const users = await User.findAll({ offset, limit, where: whereClause, order: orderClause });
+            const admins = await Admin.findAll({ where: whereClause, order: orderClause });
+            const users = await User.findAll({ where: whereClause, order: orderClause });
     
             const adminData = admins.map(admin => ({
                 ...admin.dataValues,
@@ -69,8 +70,8 @@ const adminService = {
                     return sortOrder === 'desc' ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt);
                 });
             }
-    
-            return combinedData.slice(0, limit);
+            const result = combinedData.slice(offset, limit + offset);
+            return result;
         } catch (error) {
             throw new Error(error.message);
         }

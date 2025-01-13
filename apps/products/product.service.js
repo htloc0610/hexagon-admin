@@ -160,6 +160,7 @@ const productService = {
           });
 
           const paginatedData = data.slice(offset, offset + limit);
+
       
           return paginatedData.map(product => product.dataValues);
         } catch (error) {

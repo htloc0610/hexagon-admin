@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 accountsData = data;
                 currentPage = page;
                 renderTable(accountsData);
+                console.log(data.length); 
                 updatePagination(data.length);
                 history.pushState(null, '', `?page=${currentPage}&${params.toString()}`);
             })

@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.set('manufacturer', manufacturerDropdown.value);
         }
 
-        console.log(formData);
     
         const productData = Object.fromEntries(formData.entries());
     

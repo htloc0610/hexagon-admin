@@ -11,7 +11,6 @@ const orderController = require("./apps/orders/order.controller");
 
 
 
-
 // Login, register routes -----------------------------------------------------
 router.get("/login", (req, res) => {
   res.render("login", { layout: "login-layout", currentRoute: "/login" });
@@ -23,9 +22,8 @@ router.put("/password", ensureAuthenticated, adminController.changePassword);
 
 router.use(ensureAuthenticated);
 
-// Home page route -----------------------------------------------------
-router.get("/", orderController.getDashboard);
 
+router.get("/", orderController.getDashboard);
 
 // Profile routes -----------------------------------------------------
 router.get("/profile", ensureAuthenticated, (req, res) => {

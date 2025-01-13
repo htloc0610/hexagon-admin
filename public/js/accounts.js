@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         accountsTable.innerHTML = '';
         data.forEach(account => {
             const row = document.createElement('tr');
+            
             row.innerHTML = `
                 <th scope="row" data-key="id">${account.id}</th>
                 <td data-key="username">${account.username}</td>

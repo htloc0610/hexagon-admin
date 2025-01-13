@@ -146,12 +146,22 @@ const productService = {
           data.sort((a, b) => {
             if (sortKey === 'totalPurchase') {
               return sortOrder === 'desc' ? b.dataValues.totalPurchase - a.dataValues.totalPurchase : a.dataValues.totalPurchase - b.dataValues.totalPurchase;
+            } else {
+              const aValue = a.dataValues[sortKey];
+              const bValue = b.dataValues[sortKey];
+              if (aValue < bValue) {
+                return sortOrder === 'desc' ? 1 : -1;
+              }
+              if (aValue > bValue) {
+                return sortOrder === 'desc' ? -1 : 1;
+              }
             }
             return 0;
           });
 
           const paginatedData = data.slice(offset, offset + limit);
-      
+
+    
           return paginatedData.map(product => product.dataValues);
         } catch (error) {
           throw new Error('Error retrieving filtered and sorted products: ' + error.message);

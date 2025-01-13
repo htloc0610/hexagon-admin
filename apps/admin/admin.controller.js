@@ -73,7 +73,7 @@ const adminController = {
 
     async getPaginatedAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder) {
         try {
-            console.log('Fetching accounts with parameters:', { offset, limit, filterName, filterEmail, sortKey, sortOrder });
+            // console.log('Fetching accounts with parameters:', { offset, limit, filterName, filterEmail, sortKey, sortOrder });
     
             const accounts = await adminService.fetchAccounts(
                 offset,
@@ -116,6 +116,12 @@ const adminController = {
             // Lấy dữ liệu từ request body
             const { username, email, password, firstName, lastName, url } = req.body;
 
+            // Check if the URL is the default value
+            let profileUrl = url;
+            if (url === 'defaultValue') {
+                profileUrl = 'https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png'; // Leave blank so you can paste the link
+            }
+
             // Kiểm tra xem tên người dùng hoặc email đã tồn tại chưa
             if (await adminService.checkIfUsernameExists(username)) {
                 return res.status(400).json({ message: 'Username already exists' });
@@ -125,7 +131,7 @@ const adminController = {
             }
 
             // Tạo người dùng mới
-            const newUser = await adminService.createAdmin({ username, email, password, firstName, lastName, url });
+            const newUser = await adminService.createAdmin({ username, email, password, firstName, lastName, profileUrl });
 
             // Trả về kết quả
             return res.status(201).json({
@@ -216,14 +222,14 @@ const adminController = {
                 return next(err);
             }
             if (!user) {
-                return res.status(401).json({ message: info.message });
+                return res.status(401).json({ error: info.message });
             }
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
                 }
-                // Đăng nhập thành công, chuyển hướng tới trang /
-                return res.redirect('/');
+                // Successful login, return a JSON response
+                return res.json({ success: true });
             });
         })(req, res, next);
     },

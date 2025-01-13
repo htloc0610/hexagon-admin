@@ -24,6 +24,9 @@ router.use(ensureAuthenticated);
 
 
 router.get("/", orderController.getDashboard);
+router.get("/create-admin", (req, res) => {
+  res.render("create-admin", { layout: "main", currentRoute: "/create-admin" });
+});
 
 // Profile routes -----------------------------------------------------
 router.get("/profile", ensureAuthenticated, (req, res) => {
@@ -81,8 +84,10 @@ router.get("/accounts", async (req, res) => {
 router.get("/api/accounts", ensureAuthenticated, async (req, res) => {
   try {
       const page = parseInt(req.query.page) || 1;
+      // console.log(page);
       const limit = 10;
       const offset = (page - 1) * limit;
+      // console.log(offset);
       const { filterName, filterEmail, sortKey, sortOrder } = req.query;
 
       const accounts = await adminController.getPaginatedAccounts(offset, limit, filterName, filterEmail, sortKey, sortOrder);

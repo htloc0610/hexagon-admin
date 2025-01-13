@@ -1,0 +1,75 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2><strong>Create New Admin</strong></h2>
+                </div>
+                <div class="card-body">
+                    <div id="notification" class="alert alert-success" style="display: none;"></div>
+                    <form id="createAdminForm" action="/register" method="POST">
+                        <div class="form-group">
+                            <label for="username" class="text-dark">Username:</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="text-dark">Email:</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-dark">Password:</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName" class="text-dark">First Name:</label>
+                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Enter first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="text-dark">Last Name:</label>
+                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Enter last name" required>
+                        </div>
+                        <input type="hidden" id="url" name="url" value="defaultValue">
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Create Admin</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('createAdminForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch(form.action, {
+            method: form.method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const notification = document.getElementById('notification');
+            if (data.error) {
+                notification.classList.remove('alert-success');
+                notification.classList.add('alert-danger');
+                notification.textContent = data.error;
+            } else {
+                notification.classList.remove('alert-danger');
+                notification.classList.add('alert-success');
+                notification.textContent = 'Admin created successfully.';
+                form.reset();
+            }
+            notification.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
